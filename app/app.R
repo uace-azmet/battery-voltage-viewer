@@ -8,7 +8,8 @@
 # Libraries
 #library(azmetr)
 library(bslib)
-#library(dplyr)
+library(dplyr)
+library(ggplot2)
 library(htmltools)
 #library(lubridate)
 library(shiny)
@@ -20,6 +21,38 @@ library(shiny)
 # Scripts
 #source("./R/scr##DEF.R", local = TRUE)
 
+data(penguins, package = "palmerpenguins")
+
+cards <- list(
+  card(
+    full_screen = TRUE,
+    card_header("Bill Length"),
+    plotOutput("bill_length")
+  ),
+  card(
+    full_screen = TRUE,
+    card_header("Bill depth"),
+    plotOutput("bill_depth")
+  ),
+  card(
+    full_screen = TRUE,
+    card_header("Body Mass"),
+    plotOutput("body_mass")
+  )
+)
+
+color_by <- bslib::sidebar(
+  shiny::varSelectInput(
+    "color_by", "Color by",
+    penguins[c("species", "island", "sex")],
+    selected = "species"
+  ),
+  width = 400,
+  position = "left",
+  gap = 0,
+  padding = 0
+)
+
 
 # UI --------------------
 
@@ -27,71 +60,23 @@ ui <- htmltools::htmlTemplate(
   
   filename = "azmet-shiny-template.html",
   
-  #pageFillable = bslib::page_fillable(
-  #  h2("Diamond Plots")
-  #)
-  
-  theme = bslib::bs_theme(
-    version = version_default(),
-    preset = NULL,
-    #...,
-    bg = NULL,
-    fg = NULL,
-    primary = NULL,
-    secondary = NULL,
-    success = NULL,
-    info = NULL,
-    warning = NULL,
-    danger = NULL,
-    base_font = NULL,
-    code_font = NULL,
-    heading_font = NULL,
-    font_scale = NULL,
-    bootswatch = "bootstrap"
-  ),
-  
   pageSidebar = bslib::page_sidebar(
+    
     title = NULL,
-    sidebar = "Sidebar",
-    bslib::card(
-      bslib::card_header("Summary")
+    
+    bsTheme = bslib::bs_theme(
+      version = version_default(),
+      bootswatch = NULL
     ),
-    bslib::card(
-      bslib::card_header("Table")
+    
+    sidebar = color_by,
+    navset_card_underline(
+      title = "Histograms by species",
+      nav_panel("Bill Length", plotOutput("bill_length")),
+      nav_panel("Bill Depth", plotOutput("bill_depth")),
+      nav_panel("Body Mass", plotOutput("body_mass"))
     )
-  )
-  #sidebarLayout = sidebarLayout(
-  #  position = "left",
-    
-  #  sidebarPanel(
-  #    id = "sidebarPanel",
-  #    width = 4,
-      
-  #    verticalLayout(
-  #      selectInput("dataset", label = "Dataset", choices = ls("package:datasets"))
-  #    )
-  #  ), # sidebarPanel()
-    #sidebar = bslib::sidebar(
-    #  id = "sidebar",
-    #  open = TRUE,
-    #  position = "left",
-    #  width = 250,
-    #), # sidebar()
-    
-    #mainPanel(
-    #  id = "mainPanel",
-    #  width = 8,
-    
-    #  verbatimTextOutput("summary"),
-    #  tableOutput("table")
-    #) # mainPanel()
-  #) # sidebarLayout()
-  #sidebar = bslib::sidebar(
-  #  id = "sidebar",
-  #  open = TRUE,
-  #  position = "left",
-  #  width = 250,
-  #) # sidebar()
+  ) # bslib::page_sidebar()
 ) # htmltools::htmlTemplate()
 
 
@@ -103,18 +88,18 @@ server <- function(input, output, session) {
   
   # Outputs -----
   
-  output$summary <- renderPrint({
-    dataset <- get(input$dataset, "package:datasets")
-    summary(dataset)
+  gg_plot <- reactive({
+    ggplot(penguins) +
+      geom_density(aes(fill = !!input$color_by), alpha = 0.2) +
+      theme_bw(base_size = 16) +
+      theme(axis.title = element_blank())
   })
   
-  output$table <- renderTable({
-    dataset <- get(input$dataset, "package:datasets")
-    dataset
-  })
+  output$bill_length <- renderPlot(gg_plot() + aes(bill_length_mm))
+  output$bill_depth <- renderPlot(gg_plot() + aes(bill_depth_mm))
+  output$body_mass <- renderPlot(gg_plot() + aes(body_mass_g))
 }
 
 # Run --------------------
 
 shinyApp(ui = ui, server = server)
-#shinyApp(ui = ui, function(input, output) {})
