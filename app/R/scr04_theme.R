@@ -4,8 +4,20 @@
 
 theme = 
   bslib::bs_theme(
-    version = 5, 
-    bootswatch = NULL,
-    "input-border-color" = "red"#rgb(0, 0, 0, .125)
+    version = 5,
+    preset = NULL,
+    #...,
+    bg = NULL,
+    fg = NULL,
+    primary = NULL,
+    secondary = NULL,
+    success = NULL,
+    info = NULL,
+    warning = NULL,
+    danger = NULL,
+    base_font = NULL,
+    code_font = NULL,
+    heading_font = NULL,
+    font_scale = NULL,
+    bootswatch = NULL
   )
-

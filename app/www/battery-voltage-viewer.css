@@ -1,26 +1,30 @@
 /* class */
 
-
-
-
-
 /* https://stackoverflow.com/questions/77114751/is-it-possible-to-modify-the-arrow-that-collapses-the-sidebar */
-.bslib-sidebar-layout > .collapse-toggle {
-    padding: 100px 0;
-    margin-bottom: 350px;
-    background-color: yellow !important;
-}
-        
 .bslib-sidebar-layout > .collapse-toggle > .collapse-icon {
-    fill: red !important;
+  fill: #989898 !important;
 }
 
 .control-label {
-  color: #343a40; font-weight: bold;
+  color: var(--bs-body-color); 
+  font-weight: bold;
 }
 
 .datepicker {
-  background-color: #fff !important; color: #343a40;
+  background-color: #FFFFFF; 
+  color: var(--bs-body-color);
+}
+
+.datepicker table tr td.active.active {
+  background-color: rgb(0, 0, 0, 0.1);
+  border-color: none;
+  color: var(--bs-body-color);
+  text-shadow: none;
+}
+
+.datepicker table tr td.new:hover {
+  background-color: rgb(0, 0, 0, 0.1);
+  border-color: none;
 }
 
 .figure-footer-help-text {
@@ -40,7 +44,23 @@
 }
 
 .help-block {
-  color: #989898;
+  color: #989898 !important; font-size: 1rem;
+}
+
+.selectize-dropdown .active {
+  background-color: rgb(0, 0, 0, 0.1); color: var(--bs-body-color);
+}
+
+.selectize-dropdown .active:not(.selected) {
+  background-color: rgb(0, 0, 0, 0.1); color: var(--bs-body-color);
+}
+
+.selectize-dropdown .selected:not(.active) {
+  background-color: var(--bs-body-bg); color: var(--bs-body-color);
+}
+
+.selectize-input {
+  border-color: #CCCCCC !important;
 }
 
 .selectize-input.items.full.has-options.has-items {
