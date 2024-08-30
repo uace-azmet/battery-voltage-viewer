@@ -1,5 +1,20 @@
 /* class */
 
+
+
+
+
+/* https://stackoverflow.com/questions/77114751/is-it-possible-to-modify-the-arrow-that-collapses-the-sidebar */
+.bslib-sidebar-layout > .collapse-toggle {
+    padding: 100px 0;
+    margin-bottom: 350px;
+    background-color: yellow !important;
+}
+        
+.bslib-sidebar-layout > .collapse-toggle > .collapse-icon {
+    fill: red !important;
+}
+
 .control-label {
   color: #343a40; font-weight: bold;
 }
