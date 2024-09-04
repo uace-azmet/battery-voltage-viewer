@@ -15,16 +15,18 @@
   color: var(--bs-body-color);
 }
 
-.datepicker table tr td.active.active {
+.datepicker table tr td.active.active { /*  current month and selected day, no hover */
   background-color: rgb(0, 0, 0, 0.1);
   border-color: none;
   color: var(--bs-body-color);
   text-shadow: none;
 }
 
-.datepicker table tr td.new:hover {
+.datepicker table tr td.active.active:hover { /*  current month and selected day, hover */
   background-color: rgb(0, 0, 0, 0.1);
   border-color: none;
+  color: var(--bs-body-color);
+  text-shadow: none;
 }
 
 .figure-footer-help-text {
