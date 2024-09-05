@@ -11,23 +11,41 @@
 }
 
 .datepicker {
-  background-color: #FFFFFF; 
+  background-color: #F8F8F8; 
   color: var(--bs-body-color);
 }
 
-.datepicker table tr td.active.active { /*  current month and selected day, no hover */
+.datepicker table tr td.active.day { /* current month and selected day, no hover */
   background-color: rgb(0, 0, 0, 0.1);
   border-color: none;
   color: var(--bs-body-color);
   text-shadow: none;
 }
 
-.datepicker table tr td.active.active:hover { /*  current month and selected day, hover */
+.datepicker table tr td.active.day:hover { /*  current month and selected day, hover */
   background-color: rgb(0, 0, 0, 0.1);
   border-color: none;
   color: var(--bs-body-color);
   text-shadow: none;
 }
+
+.datepicker table tr td.day:hover { /*  unselected month and day, no hover */
+  background-color: rgb(0, 0, 0, 0.1);
+}
+
+.datepicker table tr td.disabled.day:hover { /*  unselected month and day, no hover */
+  background-color: #F8F8F8;
+}
+
+.table-condensed {
+  background-color: #F8F8F8; 
+  color: var(--bs-body-color);
+}
+
+
+
+
+
 
 .figure-footer-help-text {
   color: #989898; font-style: italic;

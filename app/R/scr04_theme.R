@@ -20,4 +20,7 @@ theme =
     heading_font = NULL,
     font_scale = NULL,
     bootswatch = NULL
+  ) %>%
+  bslib::bs_add_variables(
+    "link-color" = "#8b0015"
   )
