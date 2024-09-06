@@ -1,7 +1,8 @@
+# https://rstudio.github.io/bslib/articles/bs5-variables/index.html
+
 # "Hard-code" Bootstrap version before deployment
 # https://rstudio.github.io/bslib/articles/dashboards/index.html
 #bslib::version_default()
-
 theme = 
   bslib::bs_theme(
     version = 5,
@@ -19,8 +20,7 @@ theme =
     code_font = NULL,
     heading_font = NULL,
     font_scale = NULL,
-    bootswatch = NULL
-  ) %>%
-  bslib::bs_add_variables(
-    "link-color" = "#8b0015"
+    bootswatch = NULL,
+    "focus-ring-color" = rgb(0, 0, 0, 0.1),
+    "focus-ring-width" = "0.1rem"
   )
