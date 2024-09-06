@@ -11,9 +11,11 @@ library(bslib)
 library(dplyr)
 library(ggplot2)
 library(htmltools)
-#library(lubridate)
+library(lubridate)
+library(magrittr)
 library(shiny)
-#library(vroom)
+library(tibble)
+library(vroom)
 
 # Functions
 #source("./R/fxnABC.R", local = TRUE)
@@ -41,18 +43,6 @@ cards <- list(
   )
 )
 
-color_by <- bslib::sidebar(
-  shiny::varSelectInput(
-    "color_by", "Color by",
-    penguins[c("species", "island", "sex")],
-    selected = "species"
-  ),
-  width = 400,
-  position = "left",
-  gap = 0,
-  padding = 0
-)
-
 
 # UI --------------------
 
@@ -61,21 +51,20 @@ ui <- htmltools::htmlTemplate(
   filename = "azmet-shiny-template.html",
   
   pageSidebar = bslib::page_sidebar(
-    
     title = NULL,
+    sidebar = sidebar,
     
-    bsTheme = bslib::bs_theme(
-      version = version_default(),
-      bootswatch = NULL
-    ),
-    
-    sidebar = color_by,
-    navset_card_underline(
-      title = "Histograms by species",
+    bslib::navset_card_tab(
       nav_panel("Bill Length", plotOutput("bill_length")),
       nav_panel("Bill Depth", plotOutput("bill_depth")),
       nav_panel("Body Mass", plotOutput("body_mass"))
-    )
+    ),
+    
+    fillable = TRUE,
+    fillable_mobile = FALSE,
+    theme = theme,
+    lang = NULL,
+    window_title = NA
   ) # bslib::page_sidebar()
 ) # htmltools::htmlTemplate()
 

@@ -1,2 +1,2 @@
 # battery-voltage-viewer
-Shiny app to explore plots of battery voltage with solar radiation and temperature by AZMet station
+Shiny app to explore graphs that compare battery voltage with weather variables by AZMet station
