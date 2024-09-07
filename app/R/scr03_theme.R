@@ -21,6 +21,12 @@ theme =
     heading_font = NULL,
     font_scale = NULL,
     bootswatch = NULL,
+    "nav-bg" = "red",
+    "card-border-radius" = 0,
     "focus-ring-color" = rgb(0, 0, 0, 0.1),
-    "focus-ring-width" = "0.1rem"
-  )
+    "focus-ring-width" = "0.1rem"#,
+    #"nav-link-color" = "#8b0015",
+    #"nav-link-hover-color" = "green"
+  ) |>
+  #bslib::bs_add_rules(".test-card { background-color: red; }") |>
+  bslib::bs_add_rules("#navsetCardUnderline { background-color: red; }")
