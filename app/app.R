@@ -24,8 +24,6 @@ library(vroom)
 # Scripts
 #source("./R/scr##DEF.R", local = TRUE)
 
-data(penguins, package = "palmerpenguins")
-
 #cards <- list(
 #  card(
 #    full_screen = TRUE,
@@ -56,7 +54,7 @@ ui <- htmltools::htmlTemplate(
     sidebar = sidebar,
     
     bslib::navset_card_tab(
-      id = "navsetCardUnderline",
+      id = "navsetCardTab",
       selected = "billLength",
       title = NULL,
       sidebar = NULL,
@@ -66,34 +64,34 @@ ui <- htmltools::htmlTemplate(
       full_screen = TRUE,
       wrapper = card_body,
       
-      nav_panel(
+      bslib::nav_panel(
         title = "Scatterplot",
         value = "scatterplot",
         p("scatterplot")
       ),
       
-      nav_panel(
+      bslib::nav_panel(
         title = "Time Series",
         value = "timeSeries",
         p("time series")
       ),
       
-      nav_panel(
+      bslib::nav_panel(
         title = "Bill Length",
         value = "billLength",
-        plotOutput("bill_length")
+        shiny::plotOutput("bill_length")
       ),
       
-      nav_panel(
+      bslib::nav_panel(
         title = "Bill Depth", 
         value = "billDepth",
-        plotOutput("bill_depth")
+        shiny::plotOutput("bill_depth")
       ),
       
-      nav_panel(
+      bslib::nav_panel(
         title = "Body Mass", 
         value = "bodyMass",
-        plotOutput("body_mass")
+        shiny::plotOutput("body_mass")
       )
     ) |>
       htmltools::tagAppendAttributes(
