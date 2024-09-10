@@ -24,24 +24,6 @@ library(vroom)
 # Scripts
 #source("./R/scr##DEF.R", local = TRUE)
 
-#cards <- list(
-#  card(
-#    full_screen = TRUE,
-#    card_header("Bill Length"),
-#    plotOutput("bill_length")
-#  ),
-#  card(
-#    full_screen = TRUE,
-#    card_header("Bill depth"),
-#    plotOutput("bill_depth")
-#  ),
-#  card(
-#    full_screen = TRUE,
-#    card_header("Body Mass"),
-#    plotOutput("body_mass")
-#  )
-#)
-
 
 # UI --------------------
 
