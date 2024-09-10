@@ -13,6 +13,7 @@ library(ggplot2)
 library(htmltools)
 library(lubridate)
 library(magrittr)
+library(palmerpenguins)
 library(shiny)
 library(tibble)
 library(vroom)
@@ -22,26 +23,6 @@ library(vroom)
 
 # Scripts
 #source("./R/scr##DEF.R", local = TRUE)
-
-data(penguins, package = "palmerpenguins")
-
-cards <- list(
-  card(
-    full_screen = TRUE,
-    card_header("Bill Length"),
-    plotOutput("bill_length")
-  ),
-  card(
-    full_screen = TRUE,
-    card_header("Bill depth"),
-    plotOutput("bill_depth")
-  ),
-  card(
-    full_screen = TRUE,
-    card_header("Body Mass"),
-    plotOutput("body_mass")
-  )
-)
 
 
 # UI --------------------
@@ -55,10 +36,50 @@ ui <- htmltools::htmlTemplate(
     sidebar = sidebar,
     
     bslib::navset_card_tab(
-      nav_panel("Bill Length", plotOutput("bill_length")),
-      nav_panel("Bill Depth", plotOutput("bill_depth")),
-      nav_panel("Body Mass", plotOutput("body_mass"))
-    ),
+      id = "navsetCardTab",
+      selected = "billLength",
+      title = NULL,
+      sidebar = NULL,
+      header = NULL,
+      footer = NULL,
+      height = 450,
+      full_screen = TRUE,
+      wrapper = card_body,
+      
+      bslib::nav_panel(
+        title = "Scatterplot",
+        value = "scatterplot",
+        p("scatterplot")
+      ),
+      
+      bslib::nav_panel(
+        title = "Time Series",
+        value = "timeSeries",
+        p("time series")
+      ),
+      
+      bslib::nav_panel(
+        title = "Bill Length",
+        value = "billLength",
+        shiny::plotOutput("bill_length")
+      ),
+      
+      bslib::nav_panel(
+        title = "Bill Depth", 
+        value = "billDepth",
+        shiny::plotOutput("bill_depth")
+      ),
+      
+      bslib::nav_panel(
+        title = "Body Mass", 
+        value = "bodyMass",
+        shiny::plotOutput("body_mass")
+      )
+    ) |>
+      htmltools::tagAppendAttributes(
+        #https://getbootstrap.com/docs/5.0/utilities/api/
+        class = "border-0 rounded-0 shadow-none"
+      ),
     
     fillable = TRUE,
     fillable_mobile = FALSE,

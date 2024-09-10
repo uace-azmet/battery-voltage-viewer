@@ -44,21 +44,21 @@
 }
 
 .datepicker table tr td.active.day { /* current month and selected day, no hover */
-  background-color: rgb(0, 0, 0, 0.1);
+  background-color: rgb(226, 233, 235);
   border-color: none;
   color: var(--bs-body-color);
   text-shadow: none;
 }
 
 .datepicker table tr td.active.day:hover { /*  current month and selected day, hover */
-  background-color: rgb(0, 0, 0, 0.1);
+  background-color: rgb(226, 233, 235);
   border-color: none;
   color: var(--bs-body-color);
   text-shadow: none;
 }
 
 .datepicker table tr td.day:hover { /*  unselected month and day, hover */
-  background-color: rgb(0, 0, 0, 0.1);
+  background-color: rgb(226, 233, 235);
 }
 
 .datepicker table tr td.disabled.day:hover { /*  unselected disabled month and day, hover */
@@ -80,12 +80,12 @@
 }
 
 .selectize-dropdown .active {
-  background-color: rgb(0, 0, 0, 0.1); 
+  background-color: rgb(226, 233, 235); 
   color: var(--bs-body-color);
 }
 
 .selectize-dropdown .active:not(.selected) {
-  background-color: rgb(0, 0, 0, 0.1); 
+  background-color: rgb(226, 233, 235); 
   color: var(--bs-body-color);
 }
 
