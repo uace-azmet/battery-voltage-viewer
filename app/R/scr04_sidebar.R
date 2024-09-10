@@ -25,7 +25,7 @@ sidebar <- bslib::sidebar(
       icon = bsicons::bs_icon("calendar-event"),
       
       shiny::helpText(em(
-        "Set dates for the start and end of the period of interest. Then, click or tap 'RETRIEVE DATA'."
+        "Set start and end dates of the period of interest. Then, click or tap 'RETRIEVE DATA'."
       )),
       
       htmltools::br(),
