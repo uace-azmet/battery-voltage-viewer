@@ -47,7 +47,7 @@ sidebar <- bslib::sidebar(
         inputId = "endDate",
         label = "End Date",
         value = lubridate::today(tzone = "America/Phoenix") - 1,
-        min = lubridate::today(tzone = "America/Phoenix") - lubridate::years(1),
+        min = apiStartDate,
         max = lubridate::today(tzone = "America/Phoenix") - 1,
         format = "MM d, yyyy",
         startview = "month",
