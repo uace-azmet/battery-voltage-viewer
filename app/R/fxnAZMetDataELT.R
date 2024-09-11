@@ -48,10 +48,25 @@ fxnAZMetDataELT <- function(azmetStation, startDate, endDate) {
     ))
     
     colnames(dataAZMetDataELT) <- c(varsID, varsMeasure)
+    
+    renameColumns <- 
+      dplyr::bind_rows(batteryVariables, weatherVariables) %>%
+      dplyr::select(variable, name) %>%
+      tibble::deframe()
+    
+    dataAZMetDataELT <- dataAZMetDataELT %>%
+      dplyr::select(all_of(c(varsID, varsMeasure))) %>%
+      dplyr::rename(!!! renameColumns)
   } else {
+    renameColumns <- 
+      dplyr::bind_rows(batteryVariables, weatherVariables) %>%
+      dplyr::select(variable, name) %>%
+      tibble::deframe()
+    
     dataAZMetDataELT <- dataAZMetDataELT %>%
       #dplyr::mutate(dplyr::across("wind_2min_timestamp", as.character)) %>%
-      dplyr::select(all_of(c(varsID, varsMeasure)))
+      dplyr::select(all_of(c(varsID, varsMeasure))) %>%
+      dplyr::rename(!!! renameColumns)
   }
 
   return(dataAZMetDataELT)
