@@ -35,5 +35,3 @@ weatherVariables <-
       "Air Temperature (average)", 
       "Air Temperature (minimum)")
   )
-
-data(penguins, package = "palmerpenguins")

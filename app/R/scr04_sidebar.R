@@ -97,13 +97,7 @@ sidebar <- bslib::sidebar(
         label = "Weather Variable",
         choices = weatherVariables[order(weatherVariables$variable), ]$variable,
         selected = weatherVariables[order(weatherVariables$variable), ]$variable[1]
-      ),
-      
-      #shiny::varSelectInput(
-      #  "color_by", "Color by",
-      #  penguins[c("species", "island", "sex")],
-      #  selected = "species"
-      #)
-    )
+      )
+    ) # bslib::accordion_panel()
   ), # bslib::accordion()
 ) # bslib::sidebar()

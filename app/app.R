@@ -6,14 +6,13 @@
 
 
 # Libraries
-#library(azmetr)
+library(azmetr)
 library(bslib)
 library(dplyr)
 library(ggplot2)
 library(htmltools)
 library(lubridate)
 library(magrittr)
-library(palmerpenguins)
 library(shiny)
 library(tibble)
 library(vroom)
@@ -81,17 +80,6 @@ server <- function(input, output, session) {
   
   # Outputs -----
   
-  #gg_plot <- reactive({
-  #  ggplot(penguins) +
-  #    geom_density(aes(fill = !!input$color_by), alpha = 0.2) +
-  #    theme_bw(base_size = 16) +
-  #    theme(axis.title = element_blank())
-  #})
-  
-  #output$bill_length <- renderPlot(gg_plot() + aes(bill_length_mm))
-  #output$bill_depth <- renderPlot(gg_plot() + aes(bill_depth_mm))
-  #output$body_mass <- renderPlot(gg_plot() + aes(body_mass_g))
-  
   scatterplot <- shiny::reactive({
     fxnScatterplot(
       inData = dataAZMetDataELT(),
@@ -101,7 +89,17 @@ server <- function(input, output, session) {
     )
   })
   
+  timeSeries <- shiny::reactive({
+    fxnTimeSeries(
+      inData = dataAZMetDataELT(),
+      azmetStation = input$azmetStation,
+      weatherVariable = input$weatherVariable,
+      batteryVariable = input$batteryVariable
+    )
+  })
+  
   output$scatterplot <- shiny::renderPlot(scatterplot())
+  output$timeSeries <- shiny::renderPlot(timeSeries())
 }
 
 # Run --------------------
