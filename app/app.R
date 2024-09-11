@@ -1,4 +1,4 @@
-# Shiny app to explore plots of battery voltage with solar radiation and temperature by AZMet station
+# Shiny app to explore graphs that compare battery voltage with weather variables by AZMet station
 
 # Add code for the following
 # 
@@ -6,14 +6,13 @@
 
 
 # Libraries
-#library(azmetr)
+library(azmetr)
 library(bslib)
 library(dplyr)
 library(ggplot2)
 library(htmltools)
 library(lubridate)
 library(magrittr)
-library(palmerpenguins)
 library(shiny)
 library(tibble)
 library(vroom)
@@ -33,61 +32,20 @@ ui <- htmltools::htmlTemplate(
   
   pageSidebar = bslib::page_sidebar(
     title = NULL,
+    
+    # `scr04_sidebar`
     sidebar = sidebar,
     
-    bslib::navset_card_tab(
-      id = "navsetCardTab",
-      selected = "billLength",
-      title = NULL,
-      sidebar = NULL,
-      header = NULL,
-      footer = NULL,
-      height = 450,
-      full_screen = TRUE,
-      wrapper = card_body,
-      
-      bslib::nav_panel(
-        title = "Scatterplot",
-        value = "scatterplot",
-        p("scatterplot")
-      ),
-      
-      bslib::nav_panel(
-        title = "Time Series",
-        value = "timeSeries",
-        p("time series")
-      ),
-      
-      bslib::nav_panel(
-        title = "Bill Length",
-        value = "billLength",
-        shiny::plotOutput("bill_length")
-      ),
-      
-      bslib::nav_panel(
-        title = "Bill Depth", 
-        value = "billDepth",
-        shiny::plotOutput("bill_depth")
-      ),
-      
-      bslib::nav_panel(
-        title = "Body Mass", 
-        value = "bodyMass",
-        shiny::plotOutput("body_mass")
-      )
-    ) |>
-      htmltools::tagAppendAttributes(
-        #https://getbootstrap.com/docs/5.0/utilities/api/
-        class = "border-0 rounded-0 shadow-none"
-      ),
+    # `scr05_navsetCardTab.R`
+    navsetCardTab,
     
     fillable = TRUE,
     fillable_mobile = FALSE,
     theme = theme,
     lang = NULL,
     window_title = NA
-  ) # bslib::page_sidebar()
-) # htmltools::htmlTemplate()
+  )
+)
 
 
 # Server --------------------
@@ -96,18 +54,52 @@ server <- function(input, output, session) {
   
   # Reactive events -----
   
-  # Outputs -----
-  
-  gg_plot <- reactive({
-    ggplot(penguins) +
-      geom_density(aes(fill = !!input$color_by), alpha = 0.2) +
-      theme_bw(base_size = 16) +
-      theme(axis.title = element_blank())
+  # Download AZMet data for all stations and for user-specified date range
+  dataAZMetDataELT <- eventReactive(input$retrieveData,{
+    validate(
+      need(expr = input$startDate <= input$endDate, message = FALSE)
+    )
+    
+    idRetrievingData <- showNotification(
+      ui = "Retrieving data . . .", 
+      action = NULL, 
+      duration = NULL, 
+      closeButton = FALSE,
+      id = "idRetrievingData",
+      type = "message"
+    )
+    
+    on.exit(removeNotification(id = idRetrievingData), add = TRUE)
+    
+    fxnAZMetDataELT(
+      azmetStation = NULL, 
+      startDate = input$startDate, 
+      endDate = input$endDate
+    )
   })
   
-  output$bill_length <- renderPlot(gg_plot() + aes(bill_length_mm))
-  output$bill_depth <- renderPlot(gg_plot() + aes(bill_depth_mm))
-  output$body_mass <- renderPlot(gg_plot() + aes(body_mass_g))
+  # Outputs -----
+  
+  scatterplot <- shiny::reactive({
+    fxnScatterplot(
+      inData = dataAZMetDataELT(),
+      azmetStation = input$azmetStation,
+      weatherVariable = input$weatherVariable,
+      batteryVariable = input$batteryVariable
+    )
+  })
+  
+  timeSeries <- shiny::reactive({
+    fxnTimeSeries(
+      inData = dataAZMetDataELT(),
+      azmetStation = input$azmetStation,
+      weatherVariable = input$weatherVariable,
+      batteryVariable = input$batteryVariable
+    )
+  })
+  
+  output$scatterplot <- shiny::renderPlot(scatterplot())
+  output$timeSeries <- shiny::renderPlot(timeSeries())
 }
 
 # Run --------------------
