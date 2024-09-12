@@ -30,5 +30,6 @@ fxnScatterplot <- function(inData, azmetStation, weatherVariable, batteryVariabl
         color = "#000000"
       )
   
+  scatterplot <- plotly::ggplotly(scatterplot)
   return(scatterplot)
 }

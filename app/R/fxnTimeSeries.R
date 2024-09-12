@@ -48,5 +48,6 @@ fxnTimeSeries <- function(inData, azmetStation, weatherVariable, batteryVariable
     
     facet_wrap(vars(variable), ncol = 1, scales = "free_y")
   
+  timeSeries <- plotly::ggplotly(timeSeries)
   return(timeSeries)
 }

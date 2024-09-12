@@ -98,8 +98,8 @@ server <- function(input, output, session) {
     )
   })
   
-  output$scatterplot <- shiny::renderPlot(scatterplot())
-  output$timeSeries <- shiny::renderPlot(timeSeries())
+  output$scatterplot <- plotly::renderPlotly(scatterplot())
+  output$timeSeries <- plotly::renderPlotly(timeSeries())
 }
 
 # Run --------------------

@@ -13,7 +13,7 @@ batteryVariables <-
 downloadStartDate <- lubridate::date("2024-01-01")
 
 initialSidebarStartDate <- 
-  lubridate::today(tzone = "America/Phoenix") - lubridate::dmonths(x = 6)
+  lubridate::today(tzone = "America/Phoenix") - lubridate::dmonths(x = 3)
 
 weatherVariables <- 
   tibble::tibble(

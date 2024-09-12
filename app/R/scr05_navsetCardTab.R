@@ -12,13 +12,13 @@ navsetCardTab <- bslib::navset_card_tab(
   bslib::nav_panel(
     title = "Scatterplot",
     value = "scatterplot",
-    shiny::plotOutput("scatterplot")
+    plotly::plotlyOutput("scatterplot")
   ),
   
   bslib::nav_panel(
     title = "Time Series",
     value = "timeSeries",
-    shiny::plotOutput("timeSeries")
+    plotly::plotlyOutput("timeSeries")
   )
 ) |>
   htmltools::tagAppendAttributes(
