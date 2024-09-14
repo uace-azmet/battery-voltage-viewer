@@ -8,27 +8,39 @@
 
 
 fxnScatterplot <- function(inData, azmetStation, weatherVariable, batteryVariable) {
+  inData <- inData %>%
+    dplyr::mutate(stationCategory = dplyr::if_else(
+      meta_station_name == azmetStation, azmetStation, "other stations"
+    ) %>%
+      factor(levels = c("other stations", azmetStation))
+    )
+  
+  stationCategoryColor <- c("#989898", "#3b3b3b")
+  
+  # Graph
   scatterplot <- 
-    ggplot2::ggplot() +
-      geom_point(
-        data = dplyr::filter(inData, meta_station_name != azmetStation),
-        mapping = aes(
-          # https://forum.posit.co/t/string-as-column-name-in-ggplot/155588/2
-          x = .data[[weatherVariable]],
-          y = .data[[batteryVariable]]
-        ),
-        color = "#989898"
-      ) +
-      
-      geom_point(
-        data = dplyr::filter(inData, meta_station_name == azmetStation),
-        mapping = aes(
-          # https://forum.posit.co/t/string-as-column-name-in-ggplot/155588/2
-          x = .data[[weatherVariable]],
-          y = .data[[batteryVariable]]
-        ),
-        color = "#000000"
+    ggplot2::ggplot(
+      data = inData,
+      mapping = aes(
+        # https://forum.posit.co/t/string-as-column-name-in-ggplot/155588/2
+        x = .data[[weatherVariable]],
+        y = .data[[batteryVariable]],
+        color = stationCategory
       )
+    ) +
+    
+    geom_point() +
+    geom_smooth(
+      data = dplyr::filter(inData, meta_station_name == azmetStation),
+      method = lm,
+      formula = y ~ x,
+      se = FALSE,
+      show.legend = TRUE
+    ) +
+    
+    scale_color_manual(values = stationCategoryColor) +
+    
+    theme_minimal()
   
   scatterplot <- plotly::ggplotly(scatterplot)
   return(scatterplot)
