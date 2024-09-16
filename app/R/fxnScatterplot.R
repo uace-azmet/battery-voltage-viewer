@@ -12,36 +12,81 @@ fxnScatterplot <- function(inData, azmetStation, weatherVariable, batteryVariabl
     dplyr::mutate(stationCategory = dplyr::if_else(
       meta_station_name == azmetStation, azmetStation, "other stations"
     ) %>%
-      factor(levels = c("other stations", azmetStation))
+      factor(levels = c(azmetStation, "other stations"))
     )
   
-  stationCategoryColor <- c("#989898", "#3b3b3b")
+  #stationCategoryColor <- c("#3b3b3b", "#c9c9c9")
   
-  # Graph
-  scatterplot <- 
-    ggplot2::ggplot(
-      data = inData,
-      mapping = aes(
-        # https://forum.posit.co/t/string-as-column-name-in-ggplot/155588/2
-        x = .data[[weatherVariable]],
-        y = .data[[batteryVariable]],
-        color = stationCategory
+  # ggplot graph -----
+  #scatterplot <- 
+  #  ggplot2::ggplot(
+  #    data = inData,
+  #    mapping = aes(
+  #      # https://forum.posit.co/t/string-as-column-name-in-ggplot/155588/2
+  #      x = .data[[weatherVariable]],
+  #      y = .data[[batteryVariable]],
+  #      color = stationCategory
+  #    )
+  #  ) +
+    
+  #  geom_point() +
+    
+  #  geom_smooth(
+  #    data = dplyr::filter(inData, meta_station_name == azmetStation),
+  #    method = lm,
+  #    formula = y ~ x,
+  #    se = FALSE,
+  #    show.legend = FALSE
+  #  ) +
+    
+  #  scale_color_manual(values = stationCategoryColor) +
+    
+  #  theme_minimal()
+  # -----
+  
+  # plotly graph -----
+  scatterplot <- plotly::plot_ly(
+    data = dplyr::filter(inData, meta_station_name != azmetStation),
+    x = ~.data[[weatherVariable]],
+    y = ~.data[[batteryVariable]],
+    color = ~stationCategory,
+    type = "scatter",
+    mode = "markers",
+    marker = list(
+      size = 10,
+      color = "rgba(152, 152, 152, 1.0)",
+      line = list(
+        color = "rgba(201, 201, 201, 0.8)",
+        width = 1
       )
-    ) +
-    
-    geom_point() +
-    geom_smooth(
+    ),
+    text = ~paste(
+      "Station: ",
+      meta_station_name,
+      "<br>Battery voltage: ", 
+      "batteryVariable", 
+      "<br>Weather variable: ", 
+      "weather variable"
+    )
+  ) %>%
+    plotly::add_trace(
       data = dplyr::filter(inData, meta_station_name == azmetStation),
-      method = lm,
-      formula = y ~ x,
-      se = FALSE,
-      show.legend = TRUE
-    ) +
-    
-    scale_color_manual(values = stationCategoryColor) +
-    
-    theme_minimal()
+      x = ~.data[[weatherVariable]],
+      y = ~.data[[batteryVariable]],
+      color = ~stationCategory,
+      type = "scatter",
+      mode = "markers",
+      marker = list(
+        size = 10,
+        color = "rgba(59, 59, 59, 1.0)",
+        line = list(
+          color = "rgba(152, 152, 152, 0.8)",
+          width = 1
+        )
+      )
+    )
+  # -----
   
-  scatterplot <- plotly::ggplotly(scatterplot)
+  #scatterplot <- plotly::ggplotly(scatterplot)
   return(scatterplot)
 }
