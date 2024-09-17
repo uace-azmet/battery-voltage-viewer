@@ -255,12 +255,14 @@
 
 .shiny-notification {
   background-color: rgba(30,82,136,1.0) !important; 
-  border: none !important;
-  box-shadow: 0 0 0 0.2rem rgba(30,82,136, 0.2) !important; 
-  color: #FFFFFF !important; 
+  /* border: none !important; */
+  border-radius: 3px; !important;
+  box-shadow: 0 0.5rem 1rem rgb(0,0,0) !important;
+  color: #FFFFFF !important;
+  font-size: 12pt !important;
   font-style: italic !important; 
   font-weight: bold !important;
-  left: calc(50% - 100px) !important;
+  left: calc(50% - 150px) !important;
   position: fixed !important; 
   top: calc(50%) !important; 
 }

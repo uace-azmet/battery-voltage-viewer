@@ -27,23 +27,25 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
       ),
     x = ~.data[[weatherVariable]],
     y = ~.data[[batteryVariable]],
+    #name = NULL,
     color = ~stationCategory,
     type = "scatter",
     mode = "markers",
     marker = list(
       size = 8,
-      color = "rgba(152, 152, 152, 1.0)",
+      color = "rgba(201, 201, 201, 1.0)",
       line = list(
-        color = "rgba(201, 201, 201, 1.0)",
+        color = "rgba(152, 152, 152, 1.0)",
         width = 1
       )
     ),
-    hoverinfo = "text",
-    hovertemplate = paste(
-      "<br>Battery voltage: %{y}", 
-      "<br>Weather variable: %{x}",
-      "<br>Measurement Date: ", ".data[[datetime]]",
-      "<br>AZMet station: ", "meta_station_name"
+    #hoverinfo = "text",
+    #text = as.character(.data[datetime]),
+    hovertemplate = paste0(
+      "<br><b>", weatherVariable, ":</b> %{x}",
+      "<br><b>", batteryVariable, ":</b> %{y}", 
+      "<br><b>Measurement Date:</b> %{text}",
+      "<br><b>AZMet station:</b> ", "[[meta_station_name]]"
     )
   ) %>%
     plotly::add_trace(
@@ -56,14 +58,15 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
         ),
       x = ~.data[[weatherVariable]],
       y = ~.data[[batteryVariable]],
+      #name = NULL,
       color = ~stationCategory,
       type = "scatter",
       mode = "markers",
       marker = list(
         size = 8,
-        color = "rgba(59, 59, 59, 1.0)",
+        color = "rgba(89, 89, 89, 1.0)",
         line = list(
-          color = "rgba(152, 152, 152, 1.0)",
+          color = "rgba(13, 13, 13, 1.0)",
           width = 1
         )
       )
@@ -75,7 +78,7 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
         x = 0,
         xanchor = "left",
         xref = "container",
-        y = 1,
+        y = 1.02,
         yanchor = "bottom",
         yref = "container"
       ),
