@@ -13,6 +13,7 @@ library(ggplot2)
 library(htmltools)
 library(lubridate)
 library(magrittr)
+library(plotly)
 library(shiny)
 library(tibble)
 library(vroom)
@@ -55,7 +56,7 @@ server <- function(input, output, session) {
   # Reactive events -----
   
   # Download AZMet data for all stations and for user-specified date range
-  dataAZMetDataELT <- eventReactive(input$retrieveData,{
+  dataAZMetDataELT <- eventReactive(input$retrieveData, {
     validate(
       need(expr = input$startDate <= input$endDate, message = FALSE)
     )
@@ -84,8 +85,8 @@ server <- function(input, output, session) {
     fxnScatterplot(
       inData = dataAZMetDataELT(),
       azmetStation = input$azmetStation,
-      weatherVariable = input$weatherVariable,
-      batteryVariable = input$batteryVariable
+      batteryVariable = input$batteryVariable,
+      weatherVariable = input$weatherVariable
     )
   })
   
@@ -93,8 +94,8 @@ server <- function(input, output, session) {
     fxnTimeSeries(
       inData = dataAZMetDataELT(),
       azmetStation = input$azmetStation,
-      weatherVariable = input$weatherVariable,
-      batteryVariable = input$batteryVariable
+      batteryVariable = input$batteryVariable,
+      weatherVariable = input$weatherVariable
     )
   })
   

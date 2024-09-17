@@ -2,12 +2,12 @@
 #' 
 #' @param inData - daily AZMet data from `dataAZMetDataELT()`
 #' @param azmetStation - user-specified AZMet station
-#' @param weatherVariable - user-specified weather variable
 #' @param batteryVariable - user-specified battery variable
+#' @param weatherVariable - user-specified weather variable
 #' @return `timeSeries` - time series graph based on user input
 
 
-fxnTimeSeries <- function(inData, azmetStation, weatherVariable, batteryVariable) {
+fxnTimeSeries <- function(inData, azmetStation, batteryVariable, weatherVariable) {
   inData <- inData %>%
     reshape2::melt(
       id.vars = c(
