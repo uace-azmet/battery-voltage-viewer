@@ -14,52 +14,44 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
     ) %>%
       factor(levels = c(azmetStation, "other stations"))
     ) #%>%
-    #dplyr::select(
-    #  datetime, 
-    #  meta_station_name, 
-    #  stationCategory, 
-    #  batteryVariable, 
-    #  weatherVariable
-    #)
+  #dplyr::select(
+  #  datetime, 
+  #  meta_station_name, 
+  #  stationCategory, 
+  #  batteryVariable, 
+  #  weatherVariable
+  #)
   
   trace1 <- inData %>% dplyr::filter(meta_station_name != azmetStation)
   trace2 <- inData %>% dplyr::filter(meta_station_name == azmetStation)
-
+  
   # https://plotly-r.com/ 
   # https://plotly.com/r/reference/ 
   # https://plotly.github.io/schema-viewer/ -----
-  scatterplot <- plotly::plot_ly(
-    data = trace1,
-    x = ~.data[[weatherVariable]],
-    y = ~.data[[batteryVariable]],
-    #color = ~stationCategory,
-    type = "scatter",
-    mode = "markers",
-    marker = list(
-      size = 8,
-      color = "rgba(201, 201, 201, 1.0)",
-      line = list(
-        color = "rgba(152, 152, 152, 1.0)",
-        width = 1
+  scatterplot <- 
+    plotly::plot_ly(
+      data = trace1,
+      x = ~.data[[weatherVariable]],
+      y = ~.data[[batteryVariable]],
+      color = ~stationCategory,
+      type = "scatter",
+      mode = "markers",
+      marker = list(
+        size = 8,
+        color = "rgba(201, 201, 201, 1.0)",
+        line = list(
+          color = "rgba(152, 152, 152, 1.0)",
+          width = 1
+        )
+      ),
+      hoverinfo = "text",
+      text = ~paste0(
+        "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
+        "<br><b>", batteryVariable, ":</b>  ", .data[[batteryVariable]],
+        "<br><b>Measurement Date:</b>  ", datetime,
+        "<br><b>AZMet station:</b>  ", meta_station_name
       )
-    ),
-    #name = ~.data[[meta_station_name]],
-    #hoverinfo = "text",
-    #text = ~paste0(
-    #  "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
-    #  "<br><b>", batteryVariable, ":</b>  ", .data[[batteryVariable]],
-    #  "<br><b>Measurement Date:</b>  ", "datetime",
-    #  "<br><b>AZMet station:</b>  ", "meta_station_name"
-    #)
-    hovertemplate = paste0(
-      "<br><b>", weatherVariable, ":</b>  %{x}",
-      "<br><b>", batteryVariable, ":</b>  %{y}",
-      #"%{text}",
-      #"<br><b>Measurement Date:</b>  %{text|%B%e, %Y}", # https://d3js.org/d3-time-format
-      "<br><b>AZMet station:</b>  meta_station_name",
-      "<extra></extra>"
-    )
-  ) %>%
+    ) %>%
     plotly::add_trace(
       data = trace2,
       x = ~.data[[weatherVariable]],
@@ -75,12 +67,26 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
           width = 1
         )
       )
-    )
-  
-  plotly::config(
-    scatterplot, 
-    modeBarButtonsToRemove = c("select", "lasso2d", "hoverCompareCartesian")
-  ) %>%
+    ) %>%
+    plotly::config(
+      displaylogo = FALSE,
+      displayModeBar = TRUE,
+      modeBarButtonsToRemove = c(
+        'autoScale2d',
+        'hoverClosestCartesian', 
+        'hoverCompareCartesian', 
+        'lasso2d',
+        'select'
+      ),
+      scrollZoom = FALSE,
+      toImageButtonOptions = list(
+        format = 'png', # one of png, svg, jpeg, webp
+        filename = 'AZMet-battery-voltage-viewer',
+        height = 500,
+        width = 700,
+        scale = 1
+      )
+    ) %>%
     plotly::layout(
       legend = list(
         orientation = "h",
@@ -91,6 +97,17 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
         y = 1.02,
         yanchor = "bottom",
         yref = "container"
+      ),
+      margin = list(
+        l = 0,
+        r = 30,
+        b = 0,
+        t = 0,
+        pad = 0
+      ),
+      modebar = list(
+        bgcolor = '#FFFFFF',
+        orientation = 'v'
       ),
       xaxis = list(
         title = list(

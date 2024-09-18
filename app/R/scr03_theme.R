@@ -23,7 +23,9 @@ theme =
     bootswatch = NULL,
     "card-border-radius" = 0,
     "focus-ring-color" = rgb(0, 0, 0, 0.1),
-    "focus-ring-width" = "0.1rem"
+    "focus-ring-width" = "0.1rem",
+    "tooltip-bg" = "red",
+    "tooltip-color" = 'green'
   ) |>
   bslib::bs_add_rules("
     .card-header {
