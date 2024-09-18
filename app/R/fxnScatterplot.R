@@ -13,22 +13,26 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
       meta_station_name == azmetStation, azmetStation, "other stations"
     ) %>%
       factor(levels = c(azmetStation, "other stations"))
-    )
+    ) #%>%
+    #dplyr::select(
+    #  datetime, 
+    #  meta_station_name, 
+    #  stationCategory, 
+    #  batteryVariable, 
+    #  weatherVariable
+    #)
   
-  # plotly graph https://plotly.com/r/reference/ -----
+  trace1 <- inData %>% dplyr::filter(meta_station_name != azmetStation)
+  trace2 <- inData %>% dplyr::filter(meta_station_name == azmetStation)
+
+  # https://plotly-r.com/ 
+  # https://plotly.com/r/reference/ 
+  # https://plotly.github.io/schema-viewer/ -----
   scatterplot <- plotly::plot_ly(
-    data = dplyr::filter(inData, meta_station_name != azmetStation) %>%
-      dplyr::select(
-        datetime,
-        meta_station_name, 
-        stationCategory,
-        batteryVariable,
-        weatherVariable
-      ),
+    data = trace1,
     x = ~.data[[weatherVariable]],
     y = ~.data[[batteryVariable]],
-    #name = NULL,
-    color = ~stationCategory,
+    #color = ~stationCategory,
     type = "scatter",
     mode = "markers",
     marker = list(
@@ -39,26 +43,27 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
         width = 1
       )
     ),
+    #name = ~.data[[meta_station_name]],
     #hoverinfo = "text",
-    #text = as.character(.data[datetime]),
+    #text = ~paste0(
+    #  "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
+    #  "<br><b>", batteryVariable, ":</b>  ", .data[[batteryVariable]],
+    #  "<br><b>Measurement Date:</b>  ", "datetime",
+    #  "<br><b>AZMet station:</b>  ", "meta_station_name"
+    #)
     hovertemplate = paste0(
-      "<br><b>", weatherVariable, ":</b> %{x}",
-      "<br><b>", batteryVariable, ":</b> %{y}", 
-      "<br><b>Measurement Date:</b> %{text}",
-      "<br><b>AZMet station:</b> ", "[[meta_station_name]]"
+      "<br><b>", weatherVariable, ":</b>  %{x}",
+      "<br><b>", batteryVariable, ":</b>  %{y}",
+      #"%{text}",
+      #"<br><b>Measurement Date:</b>  %{text|%B%e, %Y}", # https://d3js.org/d3-time-format
+      "<br><b>AZMet station:</b>  meta_station_name",
+      "<extra></extra>"
     )
   ) %>%
     plotly::add_trace(
-      data = dplyr::filter(inData, meta_station_name == azmetStation) %>%
-        dplyr::select(
-          meta_station_name, 
-          stationCategory,
-          batteryVariable,
-          weatherVariable
-        ),
+      data = trace2,
       x = ~.data[[weatherVariable]],
       y = ~.data[[batteryVariable]],
-      #name = NULL,
       color = ~stationCategory,
       type = "scatter",
       mode = "markers",
@@ -70,7 +75,12 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
           width = 1
         )
       )
-    ) %>%
+    )
+  
+  plotly::config(
+    scatterplot, 
+    modeBarButtonsToRemove = c("select", "lasso2d", "hoverCompareCartesian")
+  ) %>%
     plotly::layout(
       legend = list(
         orientation = "h",
@@ -97,7 +107,6 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
         zeroline = FALSE
       )
     )
-  # -----
   
   return(scatterplot)
 }
