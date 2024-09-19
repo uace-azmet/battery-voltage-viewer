@@ -24,7 +24,7 @@ theme =
     "card-border-radius" = 0,
     "focus-ring-color" = rgb(0, 0, 0, 0.1),
     "focus-ring-width" = "0.1rem",
-    "tooltip-bg" = "#1E5288"
+    "tooltip-bg" = rgb(red = 30/255, green = 82/255, blue = 136/255, alpha = 0.9)
   ) |>
   bslib::bs_add_rules("
     .card-header {
@@ -64,6 +64,6 @@ theme =
     }
     
     .tooltip-inner {
-      background-color: #1E5288 !important;
+      background-color: rgba(30, 82, 136, 0.9) !important;
     }
   ")

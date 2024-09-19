@@ -13,9 +13,11 @@ library(ggplot2)
 library(htmltools)
 library(lubridate)
 library(magrittr)
+library(parsnip)
 library(plotly)
 library(shiny)
 library(tibble)
+#library(tidymodels)
 library(vroom)
 
 # Functions

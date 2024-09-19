@@ -8,32 +8,24 @@
 
 
 fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariable) {
-  inData <- inData %>%
-    dplyr::mutate(stationCategory = dplyr::if_else(
-      meta_station_name == azmetStation, azmetStation, "other stations"
-    ) %>%
-      factor(levels = c(azmetStation, "other stations"))
-    ) #%>%
-  #dplyr::select(
-  #  datetime, 
-  #  meta_station_name, 
-  #  stationCategory, 
-  #  batteryVariable, 
-  #  weatherVariable
-  #)
+  #inData <- inData %>%
+  #  dplyr::mutate(stationCategory = dplyr::if_else(
+  #    meta_station_name == azmetStation, azmetStation, "other stations"
+  #  ) %>%
+  #    factor(levels = c(azmetStation, "other stations"))
+  #  )
   
-  trace1 <- inData %>% dplyr::filter(meta_station_name != azmetStation)
-  trace2 <- inData %>% dplyr::filter(meta_station_name == azmetStation)
+  dataOtherStations <- inData %>% dplyr::filter(meta_station_name != azmetStation)
+  dataSelectedStation <- inData %>% dplyr::filter(meta_station_name == azmetStation)
   
   # https://plotly-r.com/ 
   # https://plotly.com/r/reference/ 
   # https://plotly.github.io/schema-viewer/ -----
   scatterplot <- 
     plotly::plot_ly(
-      data = trace1,
+      data = dataOtherStations,
       x = ~.data[[weatherVariable]],
       y = ~.data[[batteryVariable]],
-      color = ~stationCategory,
       type = "scatter",
       mode = "markers",
       marker = list(
@@ -44,6 +36,7 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
           width = 1
         )
       ),
+      name = "other stations",
       hoverinfo = "text",
       text = ~paste0(
         "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
@@ -53,10 +46,9 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
       )
     ) %>%
     plotly::add_trace(
-      data = trace2,
+      data = dataSelectedStation,
       x = ~.data[[weatherVariable]],
       y = ~.data[[batteryVariable]],
-      color = ~stationCategory,
       type = "scatter",
       mode = "markers",
       marker = list(
@@ -66,7 +58,8 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
           color = "rgba(13, 13, 13, 1.0)",
           width = 1
         )
-      )
+      ),
+      name = azmetStation
     ) %>%
     plotly::config(
       displaylogo = FALSE,

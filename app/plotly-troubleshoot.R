@@ -1,4 +1,5 @@
 library(magrittr)
+library(parsnip)
 
 batteryVariables <- 
   tibble::tibble(
@@ -38,56 +39,106 @@ endDate <- "2024-09-16"
 
 inData <- fxnAZMetDataELT(azmetStation = azmetStation, startDate = startDate, endDate = endDate)
 
-
-
-fig <- plotly::plot_ly(
-  data = datasets::iris,
-  x = ~Petal.Length,
-  y = ~Petal.Width,
-  type = "scatter",
-  mode = "markers",
-  hoverinfo = "text",
-  text = ~paste(
-    "</br> Species: ", Species,
-    "</br> Petal Length: ", Petal.Length,
-    "</br> Petal Width: ", Petal.Width
-  )
-)
-fig
-
-
-
 azmetStation = "Tucson"
-
-inData <- inData %>%
-  dplyr::mutate(stationCategory = dplyr::if_else(
-    meta_station_name == azmetStation, azmetStation, "other stations"
-  ) %>%
-    factor(levels = c(azmetStation, "other stations"))
-  ) #%>%
-#dplyr::select(
-#  datetime, 
-#  meta_station_name, 
-#  stationCategory, 
-#  batteryVariable, 
-#  weatherVariable
-#)
-
-trace1 <- inData %>% dplyr::filter(meta_station_name != azmetStation)
-trace2 <- inData %>% dplyr::filter(meta_station_name == azmetStation)
-
 batteryVariable <- "Voltage maximum (V)"
 weatherVariable <- "Air Temperature maximum (°C)"
+
+dataOtherStations <- inData %>% 
+  dplyr::filter(meta_station_name != azmetStation) %>%
+  dplyr::filter(!is.na(weatherVariable)) %>%
+  dplyr::filter(!is.na(batteryVariable))
+
+dataSelectedStation <- inData %>% 
+  dplyr::filter(meta_station_name == azmetStation) %>%
+  dplyr::filter(!is.na(weatherVariable)) %>%
+  dplyr::filter(!is.na(batteryVariable))
+
+
+
+
+lmFit <- lm(
+  dataSelectedStation[[batteryVariable]] ~ dataSelectedStation[[weatherVariable]], 
+  data = dataSelectedStation
+)
+m <- lmFit$coefficients[[2]]
+b <- lmFit$coefficients[[1]]
+
+lmSelectedStation <- dataSelectedStation %>% 
+  dplyr::mutate(dataSelectedStation[[batteryVariable]] = m * dataSelectedStation[[weatherVariable]] + b)
+
+
+
+colnames(dataSelectedStation)
+
+
+
+
+
+linearModelSpec <- parsnip::linear_reg() %>%
+  parsnip::set_engine(engine = "lm") %>%
+  parsnip::set_mode(mode = "regression")
+
+set.seed(1)
+linearModel <- linearModelSpec %>%
+  parsnip::fit(
+    dataSelectedStation[[batteryVariable]] ~ dataSelectedStation[[weatherVariable]], 
+    data = dataSelectedStation
+  )
+
+dataSelectedStation %>%
+  plot_ly(x = ~.data[[weatherVariable]], y = ~.data[[batteryVariable]]) %>%
+  add_markers() %>%
+  add_lines(x = ~.data[[weatherVariable]], y = fitted(linearModel))
+
+y = ~.data[[batteryVariable]],
+
+xRange <- seq(
+  min(dataSelectedStation[[weatherVariable]], na.rm = TRUE), 
+  max(dataSelectedStation[[weatherVariable]], na.rm = TRUE), 
+  length.out = nrow(dataSelectedStation)
+)
+
+x <- matrix(xRange, nrow = nrow(dataSelectedStation), ncol = 1) |>
+  data.frame()
+
+colnames(x) <- weatherVariable
+colnames(x) <- "x"
+
+y <- linearModel %>% predict(x)
+
+colnames(y) <- batteryVariable
+colnames(y) <- "y"
+
+xy <- data.frame(x, y, check.names = FALSE) 
+
+
+data("airquality")
+airq <- airquality %>%
+  dplyr::filter(!is.na(Ozone))
+fit <- lm(Ozone ~ Wind, data = airq)
+airq %>% 
+  plot_ly(x = ~Wind) %>% 
+  add_markers(y = ~Ozone) %>% 
+  add_lines(x = ~Wind, y = fitted(fit))
+
+lmFit <- lm(
+  dataSelectedStation[[batteryVariable]] ~ dataSelectedStation[[weatherVariable]], 
+  data = dataSelectedStation
+)
+dataSelectedStation %>%
+  plot_ly(x = ~.data[[weatherVariable]]) %>%
+  add_markers(y = ~.data[[batteryVariable]]) %>%
+  add_lines(x = ~.data[[weatherVariable]], y = fitted(lmFit))
+
 
 # https://plotly-r.com/ 
 # https://plotly.com/r/reference/ 
 # https://plotly.github.io/schema-viewer/ -----
 scatterplot <- 
   plotly::plot_ly(
-    data = trace1,
+    data = dataOtherStations,
     x = ~.data[[weatherVariable]],
     y = ~.data[[batteryVariable]],
-    color = ~stationCategory,
     type = "scatter",
     mode = "markers",
     marker = list(
@@ -98,7 +149,7 @@ scatterplot <-
         width = 1
       )
     ),
-    #name = ~.data[[meta_station_name]],
+    name = "other stations",
     hoverinfo = "text",
     text = ~paste0(
       "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
@@ -106,21 +157,11 @@ scatterplot <-
       "<br><b>Measurement Date:</b>  ", datetime,
       "<br><b>AZMet station:</b>  ", meta_station_name
     )
-    #text = ~paste(datetime),
-    #hovertemplate = ~paste0(
-    #  "<br><b>", weatherVariable, ":</b>  %{x}",
-    #  "<br><b>", batteryVariable, ":</b>  %{y}",
-      #"<br><b>Measurement date:</b>  %{text}",
-    #  "<br><b>Measurement Date:</b>  %{text|%B %e, %Y}", # https://d3js.org/d3-time-format
-    #  "<br><b>AZMet station:</b>  meta_station_name",
-    #  "<extra></extra>"
-    #)
   ) %>%
   plotly::add_trace(
-    data = trace2,
+    data = dataSelectedStation,
     x = ~.data[[weatherVariable]],
     y = ~.data[[batteryVariable]],
-    color = ~stationCategory,
     type = "scatter",
     mode = "markers",
     marker = list(
@@ -130,6 +171,14 @@ scatterplot <-
         color = "rgba(13, 13, 13, 1.0)",
         width = 1
       )
+    ),
+    name = azmetStation,
+    hoverinfo = "text",
+    text = ~paste0(
+      "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
+      "<br><b>", batteryVariable, ":</b>  ", .data[[batteryVariable]],
+      "<br><b>Measurement Date:</b>  ", datetime,
+      "<br><b>AZMet station:</b>  ", meta_station_name
     )
   ) %>%
   plotly::config(
@@ -144,11 +193,11 @@ scatterplot <-
     ),
     scrollZoom = FALSE,
     toImageButtonOptions = list(
-      format = 'png', # One of png, svg, jpeg
+      format = 'png', # one of png, svg, jpeg, webp
       filename = 'AZMet-battery-voltage-viewer',
       height = 500,
       width = 700,
-      scale = 1 # Multiply title/legend/axis/canvas sizes by this factor
+      scale = 1
     )
   ) %>%
   plotly::layout(
@@ -170,6 +219,7 @@ scatterplot <-
       pad = 0
     ),
     modebar = list(
+      bgcolor = '#FFFFFF',
       orientation = 'v'
     ),
     xaxis = list(
@@ -191,3 +241,65 @@ scatterplot <-
 scatterplot
 
 
+
+
+plotly::add_trace(
+  data = xy,
+  x = ~.data[[weatherVariable]],
+  y = ~.data[[batteryVariable]],
+  type = "scatter",
+  mode = "markers",
+  marker = list(
+    size = 8,
+    color = "rgba(200, 0, 0, 1.0)",
+    line = list(
+      color = "rgba(255, 0, 0, 1.0)",
+      width = 1
+    )
+  ),name = "regression fit",
+  hoverinfo = "text",
+  text = ~paste0(
+    "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
+    "<br><b>", batteryVariable, ":</b>  ", .data[[batteryVariable]]
+  )
+) %>%
+  plotly::add_trace(
+    data = xy,
+    x = ~.data[[weatherVariable]],
+    y = ~.data[[batteryVariable]],
+    name = "regression fit line",
+    mode = "lines",
+    hoverinfo = "text",
+    text = ~paste0(
+      "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
+      "<br><b>", batteryVariable, ":</b>  ", .data[[batteryVariable]]
+    )
+  ) %>%
+
+
+
+
+library(reshape2)
+data(tips)
+
+y <- tips$tip
+X <- tips$total_bill
+
+lm_model <- linear_reg() %>% 
+  set_engine('lm') %>% 
+  set_mode('regression') %>%
+  fit(tip ~ total_bill, data = tips) 
+
+x_range <- seq(min(X), max(X), length.out = 100)
+x_range <- matrix(x_range, nrow=100, ncol=1)
+xdf <- data.frame(x_range)
+colnames(xdf) <- c('total_bill')
+
+ydf <- lm_model %>% predict(xdf) 
+
+colnames(ydf) <- c('tip')
+xy <- data.frame(xdf, ydf) 
+
+fig <- plot_ly(tips, x = ~total_bill, y = ~tip, type = 'scatter', alpha = 0.65, mode = 'markers', name = 'Tips')
+fig <- fig %>% add_trace(data = xy, x = ~total_bill, y = ~tip, name = 'Regression Fit', mode = 'lines', alpha = 1)
+fig
