@@ -24,8 +24,7 @@ theme =
     "card-border-radius" = 0,
     "focus-ring-color" = rgb(0, 0, 0, 0.1),
     "focus-ring-width" = "0.1rem",
-    "tooltip-bg" = "red",
-    "tooltip-color" = 'green'
+    "tooltip-bg" = "#1E5288"
   ) |>
   bslib::bs_add_rules("
     .card-header {
@@ -62,5 +61,9 @@ theme =
     .nav-link.active:hover {
       color: #3f0009 !important;
       text-decoration: underline;
+    }
+    
+    .tooltip-inner {
+      background-color: #1E5288 !important;
     }
   ")
