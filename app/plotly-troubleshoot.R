@@ -53,6 +53,146 @@ dataSelectedStation <- inData %>%
   dplyr::filter(!is.na(weatherVariable)) %>%
   dplyr::filter(!is.na(batteryVariable))
 
+lmFit <- lm(
+  dataSelectedStation[[batteryVariable]] ~ dataSelectedStation[[weatherVariable]], 
+  data = dataSelectedStation
+)
+
+# https://plotly-r.com/ 
+# https://plotly.com/r/reference/ 
+# https://plotly.github.io/schema-viewer/ -----
+scatterplot <- 
+  plotly::plot_ly(
+    data = dataOtherStations,
+    x = ~.data[[weatherVariable]],
+    y = ~.data[[batteryVariable]],
+    type = "scatter",
+    mode = "markers",
+    marker = list(
+      size = 8,
+      color = "rgba(201, 201, 201, 1.0)",
+      line = list(
+        color = "rgba(152, 152, 152, 1.0)",
+        width = 1
+      )
+    ),
+    name = "other stations",
+    hoverinfo = "text",
+    text = ~paste0(
+      "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
+      "<br><b>", batteryVariable, ":</b>  ", .data[[batteryVariable]],
+      "<br><b>Measurement Date:</b>  ", datetime,
+      "<br><b>AZMet station:</b>  ", meta_station_name
+    ),
+    showlegend = TRUE
+  ) %>%
+  plotly::add_trace(
+    data = dataSelectedStation,
+    x = ~.data[[weatherVariable]],
+    y = ~.data[[batteryVariable]],
+    type = "scatter",
+    mode = "markers",
+    marker = list(
+      size = 8,
+      color = "rgba(89, 89, 89, 1.0)",
+      line = list(
+        color = "rgba(13, 13, 13, 1.0)",
+        width = 1
+      )
+    ),
+    name = azmetStation,
+    hoverinfo = "text",
+    text = ~paste0(
+      "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
+      "<br><b>", batteryVariable, ":</b>  ", .data[[batteryVariable]],
+      "<br><b>Measurement Date:</b>  ", datetime,
+      "<br><b>AZMet station:</b>  ", meta_station_name
+    ),
+    showlegend = TRUE
+  ) %>%
+  plotly::add_trace(
+    data = dataSelectedStation,
+    x = ~.data[[weatherVariable]],
+    y = predict(lmFit, type = "response"), 
+    type = "scatter",
+    mode = "lines",
+    marker = NULL,
+    line = list(
+      color = "rgba(13, 13, 13, 1.0)", 
+      width = 2
+    ),
+    name = "regression line",
+    hoverinfo = "skip",
+    showlegend = FALSE
+  ) %>%
+  plotly::config(
+    displaylogo = FALSE,
+    displayModeBar = TRUE,
+    modeBarButtonsToRemove = c(
+      'autoScale2d',
+      'hoverClosestCartesian', 
+      'hoverCompareCartesian', 
+      'lasso2d',
+      'select'
+    ),
+    scrollZoom = FALSE,
+    toImageButtonOptions = list(
+      format = 'png', # one of png, svg, jpeg, webp
+      filename = 'AZMet-battery-voltage-viewer',
+      height = 500,
+      width = 700,
+      scale = 1
+    )
+  ) %>%
+  plotly::layout(
+    legend = list(
+      orientation = "h",
+      traceorder = "reversed",
+      x = 0,
+      xanchor = "left",
+      xref = "container",
+      y = 1.02,
+      yanchor = "bottom",
+      yref = "container"
+    ),
+    margin = list(
+      l = 0,
+      r = 30,
+      b = 0,
+      t = 0,
+      pad = 0
+    ),
+    modebar = list(
+      bgcolor = '#FFFFFF',
+      orientation = 'v'
+    ),
+    xaxis = list(
+      title = list(
+        standoff = 25,
+        text = weatherVariable
+      ),
+      zeroline = FALSE
+    ),
+    yaxis = list(
+      title = list(
+        standoff = 25,
+        text = batteryVariable
+      ),
+      zeroline = FALSE
+    )
+  )
+
+scatterplot
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -18,11 +18,16 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
   dataOtherStations <- inData %>% dplyr::filter(meta_station_name != azmetStation)
   dataSelectedStation <- inData %>% dplyr::filter(meta_station_name == azmetStation)
   
+  lmFit <- lm(
+    dataSelectedStation[[batteryVariable]] ~ dataSelectedStation[[weatherVariable]], 
+    data = dataSelectedStation
+  )
+  
   # https://plotly-r.com/ 
   # https://plotly.com/r/reference/ 
   # https://plotly.github.io/schema-viewer/ -----
   scatterplot <- 
-    plotly::plot_ly(
+    plotly::plot_ly( # points for `dataOtherStations`
       data = dataOtherStations,
       x = ~.data[[weatherVariable]],
       y = ~.data[[batteryVariable]],
@@ -45,7 +50,7 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
         "<br><b>AZMet station:</b>  ", meta_station_name
       )
     ) %>%
-    plotly::add_trace(
+    plotly::add_trace( # points for `dataSelectedStation`
       data = dataSelectedStation,
       x = ~.data[[weatherVariable]],
       y = ~.data[[batteryVariable]],
@@ -60,6 +65,21 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
         )
       ),
       name = azmetStation
+    ) %>%
+    plotly::add_trace( # line for linear model of `dataSelectedStation` points
+      data = dataSelectedStation,
+      x = ~.data[[weatherVariable]],
+      y = predict(lmFit, type = "response"), 
+      type = "scatter",
+      mode = "lines",
+      marker = NULL,
+      line = list(
+        color = "rgba(13, 13, 13, 1.0)", 
+        width = 2
+      ),
+      name = "regression line",
+      hoverinfo = "skip",
+      showlegend = FALSE
     ) %>%
     plotly::config(
       displaylogo = FALSE,

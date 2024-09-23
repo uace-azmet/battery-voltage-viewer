@@ -42,6 +42,10 @@ ui <- htmltools::htmlTemplate(
     # `scr05_navsetCardTab.R`
     navsetCardTab,
     
+    htmltools::br(),
+    htmltools::br(),
+    shiny::htmlOutput(outputId = "figureFooter"),
+    
     fillable = TRUE,
     fillable_mobile = FALSE,
     theme = theme,
@@ -81,7 +85,14 @@ server <- function(input, output, session) {
     )
   })
   
-  # Outputs -----
+   # Outputs -----
+  
+  figureFooter <- shiny::eventReactive(dataAZMetDataELT(), {
+    fxnFigureFooter(
+      azmetStation = input$azmetStation,
+      timeStep = "Daily"
+    )
+  })
   
   scatterplot <- shiny::reactive({
     fxnScatterplot(
@@ -101,6 +112,7 @@ server <- function(input, output, session) {
     )
   })
   
+  output$figureFooter <- shiny::renderUI({figureFooter()})
   output$scatterplot <- plotly::renderPlotly(scatterplot())
   output$timeSeries <- plotly::renderPlotly(timeSeries())
 }
