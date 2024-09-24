@@ -1,12 +1,13 @@
 #' `fxnFigureFooter.R` - Build footer for figure based on user input
 #' 
 #' @param azmetStation - AZMet station selection by user
-#' @param heatVariable - Heat variable selection by user
+#' @param startDate - Planting date of period of interest
+#' @param endDate - End date of period of interest
 #' @param timeStep - AZMet data time step
 #' @return `figureFooter` - Footer for figure based on user input
 
 
-fxnFigureFooter <- function(azmetStation, timeStep) {
+fxnFigureFooter <- function(azmetStation, startDate, endDate, timeStep) {
   # Inputs
   apiURL <- a(
     "api.azmet.arizona.edu", 
@@ -19,8 +20,6 @@ fxnFigureFooter <- function(azmetStation, timeStep) {
     href="https://uace-azmet.github.io/azmetr/",
     target="_blank"
   )
-  
-  #azmetStationURL <- x
   
   todayDate <- gsub(" 0", " ", format(lubridate::today(), "%B %d, %Y"))
   
@@ -60,8 +59,8 @@ fxnFigureFooter <- function(azmetStation, timeStep) {
     htmltools::p(
       htmltools::HTML(
         paste0(
-          "The dark gray line over the ", azmetStation, " data points represents a linear model of those data and is shown to help discern pattern.",
-          br(), br(), 
+          #"Data points for the AZMet ", azmetStationURL, " station are from ", gsub(" 0", " ", format(startDate, "%B %d, %Y")), " through ", gsub(" 0", " ", format(endDate, "%B %d, %Y")), ". The straight, dark gray line over these points is a linear model of those data for the specified period and is shown to help discern pattern.",
+          #br(), br(), 
           timeStep, " AZMet data are from ", apiURL, " and accessed using the ", azmetrURL, " R package. Values from recent dates may be based on provisional data. More information about ", webpageDataVariables, ", ", webpageNetworkMap, ", and ", webpageStationMetadata, " is available on the ", webpageAZMet, ". Users of AZMet data and related information assume all risks of its use.",
           br(), br(),
           "To cite the above AZMet data, please use: 'Arizona Meteorological Network (", todayYear, ") Arizona Meteorological Network (AZMet) Data. https://azmet.arizona.edu. Accessed ", todayDate, "', along with 'Arizona Meteorological Network (", todayYear, ") Battery Voltage Viewer. https://viz.datascience.arizona.edu/azmet/battery-voltage-viewer. Accessed ", todayDate, "'.",

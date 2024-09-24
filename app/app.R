@@ -90,6 +90,8 @@ server <- function(input, output, session) {
   figureFooter <- shiny::eventReactive(dataAZMetDataELT(), {
     fxnFigureFooter(
       azmetStation = input$azmetStation,
+      startDate = input$startDate,
+      endDate = input$endDate,
       timeStep = "Daily"
     )
   })

@@ -6,7 +6,7 @@
 #' @param weatherVariable - user-specified weather variable
 #' @return `timeSeries` - time series graph based on user input
 
-
+#https://plotly.com/r/subplots/
 fxnTimeSeries <- function(inData, azmetStation, batteryVariable, weatherVariable) {
   inData <- inData %>%
     reshape2::melt(

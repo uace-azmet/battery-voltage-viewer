@@ -104,23 +104,39 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
       legend = list(
         orientation = "h",
         traceorder = "reversed",
-        x = 0,
+        x = 0.00,
         xanchor = "left",
         xref = "container",
-        y = 1.02,
+        y = 1.04,
         yanchor = "bottom",
         yref = "container"
       ),
       margin = list(
         l = 0,
-        r = 30,
-        b = 0,
+        r = 50, # for space between plot and modebar
+        b = 100,
         t = 0,
         pad = 0
       ),
       modebar = list(
         bgcolor = '#FFFFFF',
         orientation = 'v'
+      ),
+      title = list(
+        text = paste0("The dark gray line is a linear trend of the ", azmetStation, " station data."),
+        font = list(
+          #color = "#989898",
+          color = "red",
+          family = "Open Sans",
+          size = "9px",
+          style = "italic"
+        ),
+        x = 0.0,
+        xanchor = "left",
+        xref = "container",
+        y = 0.02,
+        yanchor = "bottom",
+        yref = "container"
       ),
       xaxis = list(
         title = list(

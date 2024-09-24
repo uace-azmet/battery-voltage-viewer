@@ -145,6 +145,15 @@ scatterplot <-
     )
   ) %>%
   plotly::layout(
+    annotations = list(
+      text = "This is the caption.",
+      align = "left",
+      showarrow = FALSE,
+      x = 0.0,
+      y = -0.3,
+      xref = "paper",
+      yref = "paper"
+    ),
     legend = list(
       orientation = "h",
       traceorder = "reversed",
@@ -157,7 +166,7 @@ scatterplot <-
     ),
     margin = list(
       l = 0,
-      r = 30,
+      r = 30, # for space between plot and modebar
       b = 0,
       t = 0,
       pad = 0
