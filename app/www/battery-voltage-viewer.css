@@ -117,7 +117,9 @@
 }
 
 .help-block {
-  color: #989898 !important; font-size: 1rem;
+  color: green !important;
+  #font-family: "Open Sans";
+  font-size: 1rem;
 }
 
 .month:hover {
