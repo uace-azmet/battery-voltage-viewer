@@ -1,8 +1,5 @@
 #' `fxnFigureFooter.R` - Build footer for figure based on user input
 #' 
-#' @param azmetStation - AZMet station selection by user
-#' @param startDate - Planting date of period of interest
-#' @param endDate - End date of period of interest
 #' @param timeStep - AZMet data time step
 #' @return `figureFooter` - Footer for figure based on user input
 
@@ -11,7 +8,7 @@ fxnFigureFooter <- function(azmetStation, startDate, endDate, timeStep) {
   # Inputs
   apiURL <- a(
     "api.azmet.arizona.edu", 
-    href="https://api.azmet.arizona.edu/v1/observations/daily", # Daily data
+    href="https://api.azmet.arizona.edu/v1/observations/daily",
     target="_blank"
   )
   
@@ -55,12 +52,11 @@ fxnFigureFooter <- function(azmetStation, startDate, endDate, timeStep) {
     target="_blank"
   )
   
+  # Footer text
   figureFooter <- 
     htmltools::p(
       htmltools::HTML(
         paste0(
-          #"Data points for the AZMet ", azmetStationURL, " station are from ", gsub(" 0", " ", format(startDate, "%B %d, %Y")), " through ", gsub(" 0", " ", format(endDate, "%B %d, %Y")), ". The straight, dark gray line over these points is a linear model of those data for the specified period and is shown to help discern pattern.",
-          #br(), br(), 
           timeStep, " AZMet data are from ", apiURL, " and accessed using the ", azmetrURL, " R package. Values from recent dates may be based on provisional data. More information about ", webpageDataVariables, ", ", webpageNetworkMap, ", and ", webpageStationMetadata, " is available on the ", webpageAZMet, ". Users of AZMet data and related information assume all risks of its use.",
           br(), br(),
           "To cite the above AZMet data, please use: 'Arizona Meteorological Network (", todayYear, ") Arizona Meteorological Network (AZMet) Data. https://azmet.arizona.edu. Accessed ", todayDate, "', along with 'Arizona Meteorological Network (", todayYear, ") Battery Voltage Viewer. https://viz.datascience.arizona.edu/azmet/battery-voltage-viewer. Accessed ", todayDate, "'.",

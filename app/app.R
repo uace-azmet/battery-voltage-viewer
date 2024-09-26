@@ -88,18 +88,15 @@ server <- function(input, output, session) {
    # Outputs -----
   
   figureFooter <- shiny::eventReactive(dataAZMetDataELT(), {
-    fxnFigureFooter(
-      azmetStation = input$azmetStation,
-      startDate = input$startDate,
-      endDate = input$endDate,
-      timeStep = "Daily"
-    )
+    fxnFigureFooter(timeStep = "Daily")
   })
   
   scatterplot <- shiny::reactive({
     fxnScatterplot(
       inData = dataAZMetDataELT(),
       azmetStation = input$azmetStation,
+      startDate = input$startDate,
+      endDate = input$endDate,
       batteryVariable = input$batteryVariable,
       weatherVariable = input$weatherVariable
     )
@@ -109,6 +106,8 @@ server <- function(input, output, session) {
     fxnTimeSeries(
       inData = dataAZMetDataELT(),
       azmetStation = input$azmetStation,
+      startDate = input$startDate,
+      endDate = input$endDate,
       batteryVariable = input$batteryVariable,
       weatherVariable = input$weatherVariable
     )

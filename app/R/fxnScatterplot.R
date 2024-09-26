@@ -2,18 +2,25 @@
 #' 
 #' @param inData - daily AZMet data from `dataAZMetDataELT()`
 #' @param azmetStation - user-specified AZMet station
+#' @param startDate - Planting date of period of interest
+#' @param endDate - End date of period of interest
 #' @param batteryVariable - user-specified battery variable
 #' @param weatherVariable - user-specified weather variable
 #' @return `scatterplot` - scatterplot based on user input
 
+# https://plotly-r.com/ 
+# https://plotly.com/r/reference/ 
+# https://plotly.github.io/schema-viewer/
 
-fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariable) {
-  #inData <- inData %>%
-  #  dplyr::mutate(stationCategory = dplyr::if_else(
-  #    meta_station_name == azmetStation, azmetStation, "other stations"
-  #  ) %>%
-  #    factor(levels = c(azmetStation, "other stations"))
-  #  )
+
+fxnScatterplot <- function(
+    inData, 
+    azmetStation, 
+    startDate, 
+    endDate, 
+    batteryVariable, 
+    weatherVariable
+  ) {
   
   dataOtherStations <- inData %>% dplyr::filter(meta_station_name != azmetStation)
   dataSelectedStation <- inData %>% dplyr::filter(meta_station_name == azmetStation)
@@ -23,9 +30,6 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
     data = dataSelectedStation
   )
   
-  # https://plotly-r.com/ 
-  # https://plotly.com/r/reference/ 
-  # https://plotly.github.io/schema-viewer/ -----
   scatterplot <- 
     plotly::plot_ly( # points for `dataOtherStations`
       data = dataOtherStations,
@@ -41,14 +45,15 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
           width = 1
         )
       ),
-      name = "other stations",
+      name = "other station data",
       hoverinfo = "text",
       text = ~paste0(
         "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
         "<br><b>", batteryVariable, ":</b>  ", .data[[batteryVariable]],
         "<br><b>Measurement Date:</b>  ", datetime,
         "<br><b>AZMet station:</b>  ", meta_station_name
-      )
+      ),
+      showlegend = TRUE
     ) %>%
     plotly::add_trace( # points for `dataSelectedStation`
       data = dataSelectedStation,
@@ -64,7 +69,8 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
           width = 1
         )
       ),
-      name = azmetStation
+      name = paste0(azmetStation, " station data"),
+      showlegend = TRUE
     ) %>%
     plotly::add_trace( # line for linear model of `dataSelectedStation` points
       data = dataSelectedStation,
@@ -77,9 +83,9 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
         color = "rgba(13, 13, 13, 1.0)", 
         width = 2
       ),
-      name = "regression line",
+      name = paste0(azmetStation, " station data trend"),
       hoverinfo = "skip",
-      showlegend = FALSE
+      showlegend = TRUE
     ) %>%
     plotly::config(
       displaylogo = FALSE,
@@ -97,21 +103,17 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
         filename = 'AZMet-battery-voltage-viewer',
         height = 500,
         width = 700,
-        scale = 1
+        scale = 5
       )
     ) %>%
     plotly::layout(
-      font = list(
-        #family = "Open Sans",
-        color = "#989898"
-      ),
       legend = list(
         orientation = "h",
         traceorder = "reversed",
         x = 0.00,
         xanchor = "left",
         xref = "container",
-        y = 1.04,
+        y = 1.05,
         yanchor = "bottom",
         yref = "container"
       ),
@@ -127,7 +129,7 @@ fxnScatterplot <- function(inData, azmetStation, batteryVariable, weatherVariabl
         orientation = 'v'
       ),
       title = list(
-        text = paste0("<i>The dark gray line is a linear trend of the ", azmetStation, " station data.</i>"),
+        text = paste0("<i>Data are from ", gsub(" 0", " ", format(startDate, "%B %d, %Y")), " through ", gsub(" 0", " ", format(endDate, "%B %d, %Y")), ".</i>"),
         font = list(
           color = "#989898",
           size = 14
