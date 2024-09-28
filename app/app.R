@@ -42,6 +42,8 @@ ui <- htmltools::htmlTemplate(
     # `scr05_navsetCardTab.R`
     navsetCardTab,
     
+    shiny::htmlOutput(outputId = "figureHelpText"),
+    htmltools::br(),
     htmltools::br(),
     htmltools::br(),
     shiny::htmlOutput(outputId = "figureFooter"),
@@ -91,12 +93,17 @@ server <- function(input, output, session) {
     fxnFigureFooter(timeStep = "Daily")
   })
   
+  figureHelpText <- shiny::eventReactive(dataAZMetDataELT(), {
+    fxnFigureHelpText(
+      startDate = input$startDate,
+      endDate = input$endDate
+    )
+  })
+  
   scatterplot <- shiny::reactive({
     fxnScatterplot(
       inData = dataAZMetDataELT(),
       azmetStation = input$azmetStation,
-      startDate = input$startDate,
-      endDate = input$endDate,
       batteryVariable = input$batteryVariable,
       weatherVariable = input$weatherVariable
     )
@@ -106,14 +113,13 @@ server <- function(input, output, session) {
     fxnTimeSeries(
       inData = dataAZMetDataELT(),
       azmetStation = input$azmetStation,
-      startDate = input$startDate,
-      endDate = input$endDate,
       batteryVariable = input$batteryVariable,
       weatherVariable = input$weatherVariable
     )
   })
   
   output$figureFooter <- shiny::renderUI({figureFooter()})
+  output$figureHelpText <- shiny::renderUI({figureHelpText()})
   output$scatterplot <- plotly::renderPlotly(scatterplot())
   output$timeSeries <- plotly::renderPlotly(timeSeries())
 }

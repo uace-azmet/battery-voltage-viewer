@@ -2,8 +2,6 @@
 #' 
 #' @param inData - daily AZMet data from `dataAZMetDataELT()`
 #' @param azmetStation - user-specified AZMet station
-#' @param startDate - Planting date of period of interest
-#' @param endDate - End date of period of interest
 #' @param batteryVariable - user-specified battery variable
 #' @param weatherVariable - user-specified weather variable
 #' @return `scatterplot` - scatterplot based on user input
@@ -16,18 +14,20 @@
 fxnScatterplot <- function(
     inData, 
     azmetStation, 
-    startDate, 
-    endDate, 
     batteryVariable, 
     weatherVariable
   ) {
   
-  dataOtherStations <- inData %>% dplyr::filter(meta_station_name != azmetStation)
-  dataSelectedStation <- inData %>% dplyr::filter(meta_station_name == azmetStation)
+  dataOtherStations <- inData %>% 
+    dplyr::filter(meta_station_name != azmetStation)
+  
+  dataSelectedStation <- inData %>% 
+    dplyr::filter(meta_station_name == azmetStation)
   
   lmFit <- lm(
     dataSelectedStation[[batteryVariable]] ~ dataSelectedStation[[weatherVariable]], 
-    data = dataSelectedStation
+    data = dataSelectedStation,
+    na.action = na.exclude
   )
   
   scatterplot <- 
@@ -50,8 +50,8 @@ fxnScatterplot <- function(
       text = ~paste0(
         "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
         "<br><b>", batteryVariable, ":</b>  ", .data[[batteryVariable]],
-        "<br><b>Measurement Date:</b>  ", datetime,
-        "<br><b>AZMet station:</b>  ", meta_station_name
+        "<br><b>AZMet station:</b>  ", meta_station_name,
+        "<br><b>Measurement date:</b>  ", gsub(" 0", " ", format(datetime, "%b %d, %Y"))
       ),
       showlegend = TRUE
     ) %>%
@@ -120,7 +120,7 @@ fxnScatterplot <- function(
       margin = list(
         l = 0,
         r = 50, # for space between plot and modebar
-        b = 110, # for space between x-axis title and caption
+        b = 80, # for space between x-axis title and caption
         t = 0,
         pad = 0
       ),
@@ -128,21 +128,22 @@ fxnScatterplot <- function(
         bgcolor = '#FFFFFF',
         orientation = 'v'
       ),
-      title = list(
-        text = paste0("<i>Data are from ", gsub(" 0", " ", format(startDate, "%B %d, %Y")), " through ", gsub(" 0", " ", format(endDate, "%B %d, %Y")), ".</i>"),
-        font = list(
-          color = "#989898",
-          size = 14
-        ),
-        x = 0.0,
-        xanchor = "left",
-        xref = "container",
-        y = 0.02,
-        yanchor = "bottom",
-        yref = "container"
-      ),
+      #title = list( # to make a caption
+      #  text = ~paste0("<i>Data are from ", gsub(" 0", " ", format(startDate, "%B %d, %Y")), " through ", gsub(" 0", " ", format(endDate, "%B %d, %Y")), ".<br>Click or tap on legend items to toggle data visibility.</i>"), # https://github.com/plotly/plotly.js/blob/c1ef6911da054f3b16a7abe8fb2d56019988ba14/src/components/fx/hover.js#L1596
+      #  font = list(
+      #    color = "#989898",
+      #    size = 14
+      #  ),
+      #  x = 0.0,
+      #  xanchor = "left",
+      #  xref = "container",
+      #  y = 0.05,
+      #  yanchor = "bottom",
+      #  yref = "container"
+      #),
       xaxis = list(
         title = list(
+          font = list(size = 13),
           standoff = 25,
           text = weatherVariable
         ),
@@ -150,6 +151,7 @@ fxnScatterplot <- function(
       ),
       yaxis = list(
         title = list(
+          font = list(size = 13),
           standoff = 25,
           text = batteryVariable
         ),

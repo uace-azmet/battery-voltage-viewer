@@ -29,7 +29,7 @@ weatherVariables <-
     variable = c(
       "Relative Humidity maximum (%)", 
       "Relative Humidity average (%)", 
-      "Relative Humidity minimum (%", 
+      "Relative Humidity minimum (%)", 
       "Solar Radiation total (MJ/m^2)",
       "Air Temperature maximum (°C)", 
       "Air Temperature average (°C)", 
