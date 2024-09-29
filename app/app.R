@@ -53,6 +53,8 @@ ui <- htmltools::htmlTemplate(
     theme = theme,
     lang = NULL,
     window_title = NA
+    
+    
   )
 )
 
@@ -61,12 +63,29 @@ ui <- htmltools::htmlTemplate(
 
 server <- function(input, output, session) {
   
-  # Reactive events -----
+  shiny::observeEvent(input$retrieveData, {
+    if (input$startDate > input$endDate) {
+      shiny::showModal(
+        shiny::modalDialog(
+          shiny::helpText(em(
+            "Please select a 'Start Date' that is earlier than or the same as the 'End Date'."
+          )),
+          easyClose = FALSE,
+          fade = FALSE,
+          footer = shiny::modalButton("OK"),
+          size = "s",
+          title = htmltools::p(bsicons::bs_icon("calendar-event"), " DATE SELECTION")
+        )
+      )
+    }
+  })
   
-  # Download AZMet data for all stations and for user-specified date range
   dataAZMetDataELT <- eventReactive(input$retrieveData, {
     validate(
-      need(expr = input$startDate <= input$endDate, message = FALSE)
+      need(
+        expr = input$startDate <= input$endDate,
+        message = FALSE
+      )
     )
     
     idRetrievingData <- showNotification(
@@ -86,8 +105,6 @@ server <- function(input, output, session) {
       endDate = input$endDate
     )
   })
-  
-   # Outputs -----
   
   figureFooter <- shiny::eventReactive(dataAZMetDataELT(), {
     fxnFigureFooter(timeStep = "Daily")
@@ -117,6 +134,8 @@ server <- function(input, output, session) {
       weatherVariable = input$weatherVariable
     )
   })
+  
+  # Outputs -----
   
   output$figureFooter <- shiny::renderUI({figureFooter()})
   output$figureHelpText <- shiny::renderUI({figureHelpText()})
