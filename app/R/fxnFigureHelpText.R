@@ -13,7 +13,7 @@ fxnFigureHelpText <- function(
   figureHelpText <- 
     htmltools::p(
       htmltools::HTML(
-        "Data are from ", gsub(" 0", " ", format(startDate, "%B %d, %Y")), " through ", gsub(" 0", " ", format(endDate, "%B %d, %Y")), ". Click or tap on legend items to toggle data visibility."
+        "Data are from ", gsub(" 0", " ", format(startDate, "%B %d, %Y")), " through ", gsub(" 0", " ", format(endDate, "%B %d, %Y")), ". Hover over data for variable values and click or tap on legend items to toggle data visibility. Select from the icons to the right of the graph for additional functionality."
       ), 
       
       class = "figure-help-text"
