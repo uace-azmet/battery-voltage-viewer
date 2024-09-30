@@ -3,6 +3,7 @@
 # "Hard-code" Bootstrap version before deployment
 # https://rstudio.github.io/bslib/articles/dashboards/index.html
 #bslib::version_default()
+
 theme = 
   bslib::bs_theme(
     version = 5,

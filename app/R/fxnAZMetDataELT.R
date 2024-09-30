@@ -1,12 +1,17 @@
-#' `fxnAZMetDataELT.R` AZMet hourly or daily data download from API-based database
+#' `fxnAZMetDataELT.R` AZMet daily data download from API-based database
 #' 
 #' @param azmetStation - AZMet station name
 #' @param startDate - Start date of period of interest
 #' @param endDate - End date of period of interest
-#' @return `dataAZMetDataELT` - Transformed data table
+#' @return `dataAZMetDataELT` - Transformed tibble of requested AZMet daily data
 
 
-fxnAZMetDataELT <- function(azmetStation, startDate, endDate) {
+fxnAZMetDataELT <- function(
+    azmetStation, 
+    startDate, 
+    endDate
+  ) {
+  
   dataAZMetDataELT <- azmetr::az_daily(
     station_id = azmetStation, 
     start_date = startDate, 

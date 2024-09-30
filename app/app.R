@@ -9,22 +9,19 @@
 library(azmetr)
 library(bslib)
 library(dplyr)
-library(ggplot2)
 library(htmltools)
 library(lubridate)
 library(magrittr)
-library(parsnip)
 library(plotly)
 library(shiny)
 library(tibble)
-#library(tidymodels)
 library(vroom)
 
 # Functions
 #source("./R/fxnABC.R", local = TRUE)
 
 # Scripts
-#source("./R/scr##DEF.R", local = TRUE)
+#source("./R/scr##_DEF.R", local = TRUE)
 
 
 # UI --------------------
@@ -36,11 +33,9 @@ ui <- htmltools::htmlTemplate(
   pageSidebar = bslib::page_sidebar(
     title = NULL,
     
-    # `scr04_sidebar`
-    sidebar = sidebar,
+    sidebar = sidebar, # `scr04_sidebar.R`
     
-    # `scr05_navsetCardTab.R`
-    navsetCardTab,
+    navsetCardTab, # `scr05_navsetCardTab.R`
     
     shiny::htmlOutput(outputId = "figureHelpText"),
     htmltools::br(),
@@ -50,11 +45,9 @@ ui <- htmltools::htmlTemplate(
     
     fillable = TRUE,
     fillable_mobile = FALSE,
-    theme = theme,
+    theme = theme, # `scr03_theme.R`
     lang = NULL,
     window_title = NA
-    
-    
   )
 )
 
@@ -65,19 +58,19 @@ server <- function(input, output, session) {
   
   shiny::observeEvent(input$retrieveData, {
     if (input$startDate > input$endDate) {
-      shiny::showModal(datepickerErrorModal)
+      shiny::showModal(datepickerErrorModal) # `scr06_datepickerErrorModal.R`
     }
   })
   
-  dataAZMetDataELT <- eventReactive(input$retrieveData, {
-    validate(
-      need(
+  dataAZMetDataELT <- shiny::eventReactive(input$retrieveData, {
+    shiny::validate(
+      shiny::need(
         expr = input$startDate <= input$endDate,
         message = FALSE
       )
     )
     
-    idRetrievingData <- showNotification(
+    idRetrievingData <- shiny::showNotification(
       ui = "Retrieving data . . .", 
       action = NULL, 
       duration = NULL, 
@@ -86,7 +79,7 @@ server <- function(input, output, session) {
       type = "message"
     )
     
-    on.exit(removeNotification(id = idRetrievingData), add = TRUE)
+    on.exit(shiny::removeNotification(id = idRetrievingData), add = TRUE)
     
     fxnAZMetDataELT(
       azmetStation = NULL, 
@@ -134,4 +127,4 @@ server <- function(input, output, session) {
 
 # Run --------------------
 
-shinyApp(ui = ui, server = server)
+shiny::shinyApp(ui = ui, server = server)
