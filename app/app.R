@@ -13,8 +13,11 @@ library(ggplot2)
 library(htmltools)
 library(lubridate)
 library(magrittr)
+library(parsnip)
+library(plotly)
 library(shiny)
 library(tibble)
+#library(tidymodels)
 library(vroom)
 
 # Functions
@@ -39,11 +42,19 @@ ui <- htmltools::htmlTemplate(
     # `scr05_navsetCardTab.R`
     navsetCardTab,
     
+    shiny::htmlOutput(outputId = "figureHelpText"),
+    htmltools::br(),
+    htmltools::br(),
+    htmltools::br(),
+    shiny::htmlOutput(outputId = "figureFooter"),
+    
     fillable = TRUE,
     fillable_mobile = FALSE,
     theme = theme,
     lang = NULL,
     window_title = NA
+    
+    
   )
 )
 
@@ -52,12 +63,18 @@ ui <- htmltools::htmlTemplate(
 
 server <- function(input, output, session) {
   
-  # Reactive events -----
+  shiny::observeEvent(input$retrieveData, {
+    if (input$startDate > input$endDate) {
+      shiny::showModal(datepickerErrorModal)
+    }
+  })
   
-  # Download AZMet data for all stations and for user-specified date range
-  dataAZMetDataELT <- eventReactive(input$retrieveData,{
+  dataAZMetDataELT <- eventReactive(input$retrieveData, {
     validate(
-      need(expr = input$startDate <= input$endDate, message = FALSE)
+      need(
+        expr = input$startDate <= input$endDate,
+        message = FALSE
+      )
     )
     
     idRetrievingData <- showNotification(
@@ -78,14 +95,23 @@ server <- function(input, output, session) {
     )
   })
   
-  # Outputs -----
+  figureFooter <- shiny::eventReactive(dataAZMetDataELT(), {
+    fxnFigureFooter(timeStep = "Daily")
+  })
+  
+  figureHelpText <- shiny::eventReactive(dataAZMetDataELT(), {
+    fxnFigureHelpText(
+      startDate = input$startDate,
+      endDate = input$endDate
+    )
+  })
   
   scatterplot <- shiny::reactive({
     fxnScatterplot(
       inData = dataAZMetDataELT(),
       azmetStation = input$azmetStation,
-      weatherVariable = input$weatherVariable,
-      batteryVariable = input$batteryVariable
+      batteryVariable = input$batteryVariable,
+      weatherVariable = input$weatherVariable
     )
   })
   
@@ -93,13 +119,17 @@ server <- function(input, output, session) {
     fxnTimeSeries(
       inData = dataAZMetDataELT(),
       azmetStation = input$azmetStation,
-      weatherVariable = input$weatherVariable,
-      batteryVariable = input$batteryVariable
+      batteryVariable = input$batteryVariable,
+      weatherVariable = input$weatherVariable
     )
   })
   
-  output$scatterplot <- shiny::renderPlot(scatterplot())
-  output$timeSeries <- shiny::renderPlot(timeSeries())
+  # Outputs -----
+  
+  output$figureFooter <- shiny::renderUI({figureFooter()})
+  output$figureHelpText <- shiny::renderUI({figureHelpText()})
+  output$scatterplot <- plotly::renderPlotly(scatterplot())
+  output$timeSeries <- plotly::renderPlotly(timeSeries())
 }
 
 # Run --------------------
