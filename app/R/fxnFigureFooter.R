@@ -4,7 +4,10 @@
 #' @return `figureFooter` - Footer for figure based on user input
 
 
-fxnFigureFooter <- function(azmetStation, startDate, endDate, timeStep) {
+fxnFigureFooter <- function(
+    timeStep
+  ) {
+  
   # Inputs
   apiURL <- a(
     "api.azmet.arizona.edu", 
@@ -58,9 +61,9 @@ fxnFigureFooter <- function(azmetStation, startDate, endDate, timeStep) {
       htmltools::HTML(
         paste0(
           timeStep, " AZMet data are from ", apiURL, " and accessed using the ", azmetrURL, " R package. Values from recent dates may be based on provisional data. More information about ", webpageDataVariables, ", ", webpageNetworkMap, ", and ", webpageStationMetadata, " is available on the ", webpageAZMet, ". Users of AZMet data and related information assume all risks of its use.",
-          br(), br(),
+          htmltools::br(), htmltools::br(),
           "To cite the above AZMet data, please use: 'Arizona Meteorological Network (", todayYear, ") Arizona Meteorological Network (AZMet) Data. https://azmet.arizona.edu. Accessed ", todayDate, "', along with 'Arizona Meteorological Network (", todayYear, ") Battery Voltage Viewer. https://viz.datascience.arizona.edu/azmet/battery-voltage-viewer. Accessed ", todayDate, "'.",
-          br(), br(),
+          htmltools::br(), htmltools::br(),
           "For information on how this webpage is put together, please visit the ", webpageCode, " for this tool."
         )
       )

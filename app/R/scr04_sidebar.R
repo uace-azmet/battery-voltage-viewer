@@ -24,7 +24,7 @@ sidebar <- bslib::sidebar(
       value = "dateSelection",
       icon = bsicons::bs_icon("calendar-event"),
       
-      shiny::helpText(em(
+      shiny::helpText(shiny::em(
         "Set start and end dates of the period of interest. Then, click or tap 'RETRIEVE DATA'."
       )),
       
@@ -33,7 +33,7 @@ sidebar <- bslib::sidebar(
       shiny::dateInput(
         inputId = "startDate",
         label = "Start Date",
-        value = initialSidebarStartDate,
+        value = lubridate::today(tzone = "America/Phoenix") - lubridate::dmonths(x = 3),
         min = apiStartDate,
         max = lubridate::today(tzone = "America/Phoenix") - 1,
         format = "MM d, yyyy",
@@ -72,7 +72,7 @@ sidebar <- bslib::sidebar(
       value = "dataDisplay",
       icon = bsicons::bs_icon("graph-up"),
       
-      shiny::helpText(em(
+      shiny::helpText(shiny::em(
         "Specify an AZMet station to highlight, and battery and weather variables to show in the graph."
       )),
       

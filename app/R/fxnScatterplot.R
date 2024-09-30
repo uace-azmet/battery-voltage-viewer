@@ -9,6 +9,7 @@
 # https://plotly-r.com/ 
 # https://plotly.com/r/reference/ 
 # https://plotly.github.io/schema-viewer/
+# https://github.com/plotly/plotly.js/blob/c1ef6911da054f3b16a7abe8fb2d56019988ba14/src/components/fx/hover.js#L1596
 
 
 fxnScatterplot <- function(
@@ -24,14 +25,14 @@ fxnScatterplot <- function(
   dataSelectedStation <- inData %>% 
     dplyr::filter(meta_station_name == azmetStation)
   
-  lmFit <- lm(
+  lmFit <- stats::lm(
     dataSelectedStation[[batteryVariable]] ~ dataSelectedStation[[weatherVariable]], 
     data = dataSelectedStation,
     na.action = na.exclude
   )
   
   scatterplot <- 
-    plotly::plot_ly( # points for `dataOtherStations`
+    plotly::plot_ly( # Points for `dataOtherStations`
       data = dataOtherStations,
       x = ~.data[[weatherVariable]],
       y = ~.data[[batteryVariable]],
@@ -55,7 +56,8 @@ fxnScatterplot <- function(
       ),
       showlegend = TRUE
     ) %>%
-    plotly::add_trace( # points for `dataSelectedStation`
+    
+    plotly::add_trace( # Points for `dataSelectedStation`
       data = dataSelectedStation,
       x = ~.data[[weatherVariable]],
       y = ~.data[[batteryVariable]],
@@ -72,10 +74,11 @@ fxnScatterplot <- function(
       name = paste0(azmetStation, " station data"),
       showlegend = TRUE
     ) %>%
-    plotly::add_trace( # line for linear model of `dataSelectedStation` points
+    
+    plotly::add_trace( # Trend line for `dataSelectedStation` points
       data = dataSelectedStation,
       x = ~.data[[weatherVariable]],
-      y = predict(lmFit, type = "response"), 
+      y = stats::predict(lmFit, type = "response"), 
       type = "scatter",
       mode = "lines",
       marker = NULL,
@@ -87,25 +90,27 @@ fxnScatterplot <- function(
       hoverinfo = "skip",
       showlegend = TRUE
     ) %>%
+    
     plotly::config(
       displaylogo = FALSE,
       displayModeBar = TRUE,
       modeBarButtonsToRemove = c(
-        'autoScale2d',
-        'hoverClosestCartesian', 
-        'hoverCompareCartesian', 
-        'lasso2d',
-        'select'
+        "autoScale2d",
+        "hoverClosestCartesian", 
+        "hoverCompareCartesian", 
+        "lasso2d",
+        "select"
       ),
       scrollZoom = FALSE,
       toImageButtonOptions = list(
-        format = 'png', # one of png, svg, jpeg, webp
-        filename = 'AZMet-battery-voltage-viewer',
+        format = "png", # Either png, svg, jpeg, or webp
+        filename = "AZMet-battery-voltage-viewer-scatterplot",
         height = 500,
         width = 700,
         scale = 5
       )
     ) %>%
+    
     plotly::layout(
       legend = list(
         orientation = "h",
@@ -119,14 +124,14 @@ fxnScatterplot <- function(
       ),
       margin = list(
         l = 0,
-        r = 50, # for space between plot and modebar
-        b = 80, # for space between x-axis title and caption
+        r = 50, # For space between plot and modebar
+        b = 80, # For space between x-axis title and caption or figure help text
         t = 0,
         pad = 0
       ),
       modebar = list(
-        bgcolor = '#FFFFFF',
-        orientation = 'v'
+        bgcolor = "#FFFFFF",
+        orientation = "v"
       ),
       #title = list( # to make a caption
       #  text = ~paste0("<i>Data are from ", gsub(" 0", " ", format(startDate, "%B %d, %Y")), " through ", gsub(" 0", " ", format(endDate, "%B %d, %Y")), ".<br>Click or tap on legend items to toggle data visibility.</i>"), # https://github.com/plotly/plotly.js/blob/c1ef6911da054f3b16a7abe8fb2d56019988ba14/src/components/fx/hover.js#L1596
