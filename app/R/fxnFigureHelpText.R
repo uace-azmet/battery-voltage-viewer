@@ -1,6 +1,6 @@
 #' `fxnFigureHelpText.R` - Build help text for figure
 #' 
-#' @param startDate - Planting date of period of interest
+#' @param startDate - Start date of period of interest
 #' @param endDate - End date of period of interest
 #' @return `figureHelpText` - Help text for figure
 

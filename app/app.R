@@ -65,18 +65,7 @@ server <- function(input, output, session) {
   
   shiny::observeEvent(input$retrieveData, {
     if (input$startDate > input$endDate) {
-      shiny::showModal(
-        shiny::modalDialog(
-          shiny::helpText(em(
-            "Please select a 'Start Date' that is earlier than or the same as the 'End Date'."
-          )),
-          easyClose = FALSE,
-          fade = FALSE,
-          footer = shiny::modalButton("OK"),
-          size = "s",
-          title = htmltools::p(bsicons::bs_icon("calendar-event"), " DATE SELECTION")
-        )
-      )
+      shiny::showModal(datepickerErrorModal)
     }
   })
   
