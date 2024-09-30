@@ -6,14 +6,14 @@ batteryVariables <-
       "meta_bat_volt_max", "meta_bat_volt_mean", "meta_bat_volt_min"
     ),
     variable = c(
-      "Voltage (maximum)", "Voltage (average)", "Voltage (minimum)"
+      "Voltage maximum (V)", "Voltage average (V)", "Voltage minimum (V)"
     )
   )
 
 downloadStartDate <- lubridate::date("2024-01-01")
 
 initialSidebarStartDate <- 
-  lubridate::today(tzone = "America/Phoenix") - lubridate::dmonths(x = 6)
+  lubridate::today(tzone = "America/Phoenix") - lubridate::dmonths(x = 3)
 
 weatherVariables <- 
   tibble::tibble(
@@ -27,11 +27,11 @@ weatherVariables <-
       "temp_air_minC"
     ),
     variable = c(
-      "Relative Humidity (maximum)", 
-      "Relative Humidity (average)", 
-      "Relative Humidity (minimum)", 
-      "Solar Radiation (total)",
-      "Air Temperature (maximum)", 
-      "Air Temperature (average)", 
-      "Air Temperature (minimum)")
+      "Relative Humidity maximum (%)", 
+      "Relative Humidity average (%)", 
+      "Relative Humidity minimum (%)", 
+      "Solar Radiation total (MJ/m^2)",
+      "Air Temperature maximum (°C)", 
+      "Air Temperature average (°C)", 
+      "Air Temperature minimum (°C)")
   )
