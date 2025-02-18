@@ -70,7 +70,7 @@ sidebar <- bslib::sidebar(
     bslib::accordion_panel(
       title = "DATA DISPLAY",
       value = "dataDisplay",
-      icon = bsicons::bs_icon("graph-up"),
+      icon = bsicons::bs_icon("sliders"),
       
       shiny::helpText(shiny::em(
         "Specify an AZMet station to highlight, and battery and weather variables to show in the graph."
