@@ -66,7 +66,9 @@ fxnFigureFooter <- function(
           htmltools::br(), htmltools::br(),
           "For information on how this webpage is put together, please visit the ", webpageCode, " for this tool."
         )
-      )
+      ),
+      
+      class = "figure-footer"
     )
   
   return(figureFooter)

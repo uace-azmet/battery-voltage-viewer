@@ -34,9 +34,9 @@ ui <- htmltools::htmlTemplate(
     navsetCardTab, # `scr05_navsetCardTab.R`
     
     shiny::htmlOutput(outputId = "figureHelpText"),
-    htmltools::br(),
-    htmltools::br(),
-    htmltools::br(),
+    #htmltools::br(),
+    #htmltools::br(),
+    #htmltools::br(),
     shiny::htmlOutput(outputId = "figureFooter"),
     
     fillable = TRUE,
