@@ -120,7 +120,7 @@ fxnScatterplot <- function(
       hoverlabel = list(
         font = list(
           family = "proxima-nova, calibri, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
-          size = 13
+          size = 14
         )
       ),
       legend = list(
@@ -136,7 +136,7 @@ fxnScatterplot <- function(
       margin = list(
         l = 0,
         r = 50, # For space between plot and modebar
-        b = 80, # For space between x-axis title and caption or figure help text
+        b = 70, # For space between x-axis title and caption or figure help text
         t = 0,
         pad = 0
       ),
@@ -144,22 +144,9 @@ fxnScatterplot <- function(
         bgcolor = "#FFFFFF",
         orientation = "v"
       ),
-      #title = list( # to make a caption
-      #  text = ~paste0("<i>Data are from ", gsub(" 0", " ", format(startDate, "%B %d, %Y")), " through ", gsub(" 0", " ", format(endDate, "%B %d, %Y")), ".<br>Click or tap on legend items to toggle data visibility.</i>"), # https://github.com/plotly/plotly.js/blob/c1ef6911da054f3b16a7abe8fb2d56019988ba14/src/components/fx/hover.js#L1596
-      #  font = list(
-      #    color = "#989898",
-      #    size = 14
-      #  ),
-      #  x = 0.0,
-      #  xanchor = "left",
-      #  xref = "container",
-      #  y = 0.05,
-      #  yanchor = "bottom",
-      #  yref = "container"
-      #),
       xaxis = list(
         title = list(
-          font = list(size = 13),
+          font = list(size = 14),
           standoff = 25,
           text = weatherVariable
         ),
@@ -167,7 +154,7 @@ fxnScatterplot <- function(
       ),
       yaxis = list(
         title = list(
-          font = list(size = 13),
+          font = list(size = 14),
           standoff = 25,
           text = batteryVariable
         ),

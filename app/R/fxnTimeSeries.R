@@ -141,7 +141,7 @@ fxnTimeSeries <- function(
       hoverlabel = list(
         font = list(
           family = "proxima-nova, calibri, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
-          size = 13
+          size = 14
         )
       ),
       legend = list(
@@ -180,7 +180,7 @@ fxnTimeSeries <- function(
       #),
       xaxis = list(
         title = list(
-          font = list(size = 13),
+          font = list(size = 14),
           standoff = 25,
           text = "Date"
         ),
@@ -188,7 +188,7 @@ fxnTimeSeries <- function(
       ),
       yaxis = list(
         title = list(
-          font = list(size = 13),
+          font = list(size = 14),
           standoff = 25,
           text = batteryVariable
         ),
@@ -197,7 +197,7 @@ fxnTimeSeries <- function(
       yaxis2 = list(
         title = list(
           font = list(
-            size = 13
+            size = 14
           ),
           standoff = 25,
           text = weatherVariable

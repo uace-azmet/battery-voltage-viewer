@@ -5,7 +5,7 @@ sidebar <- bslib::sidebar(
   id = "sidebar",
   title = NULL,
   bg = "#FFFFFF",
-  fg = "#000000",
+  fg = "#191919",
   class = NULL,
   max_height_mobile = NULL,
   gap = NULL,
