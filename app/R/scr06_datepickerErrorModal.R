@@ -1,16 +1,16 @@
 datepickerErrorModal <- 
   shiny::modalDialog(
-    shiny::em(
-      "Please select a 'Start Date' that is earlier than or the same as the 'End Date'."
+    htmltools::HTML(
+      "<em>Please select a <b>Start Date</b> that is earlier than or the same as the <b>End Date</b>.</em>"
     ),
     easyClose = FALSE,
     fade = FALSE,
     footer = shiny::modalButton("CLOSE"),
     size = "s",
-    title = htmltools::p(
-      id = "datepickerModal",
-      bsicons::bs_icon("calendar-event"), 
-      htmltools::HTML("&nbsp;"),
-      "DATE SELECTION"
-    )
+    title = 
+      htmltools::p(
+        id = "datepickerModal",
+        bsicons::bs_icon("sliders", class = "bolder-icon"), 
+        htmltools::HTML("&nbsp;<b>DATA OPTIONS</b>")
+      )
   )
