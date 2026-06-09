@@ -38,8 +38,8 @@ navsetCardTabSidebar <-
       shiny::selectInput(
         inputId = "azmetStation", 
         label = "AZMet Station",
-        choices = azmetStations[order(azmetStations$stationName), ]$stationName,
-        selected = "Aguila"
+        choices = azmetStationMetadata$meta_station_name,
+        selected = azmetStationMetadata$meta_station_name[1]
       ),
         
       shiny::selectInput(
