@@ -1,31 +1,28 @@
 # Explore graphs that compare battery voltage with weather variables by station
 
 
-
-
 # UI --------------------
 
 
 ui <- 
   htmltools::htmlTemplate(
-    
     filename = "azmet-shiny-template.html",
     
-    pageSidebar = bslib::page_sidebar(
-      title = NULL,
-      fillable = TRUE,
-      fillable_mobile = FALSE,
-      lang = NULL,
-      sidebar = sidebar, # `scr##_sidebar.R`
-      theme = theme, # `scr03_theme.R`
-      window_title = NA,
-      
-      navsetCardTab, # `scr##_navsetCardTab.R`
-      
-      shiny::htmlOutput(outputId = "figureHelpText"),
-      shiny::htmlOutput(outputId = "figureFooter")
+    pageSidebarBatteryVoltageViewer = 
+      bslib::page_sidebar(
+        title = NULL,
+        sidebar = pageSidebar, # `scr##_pageSidebar.R`
+        theme = theme, # `scr##_theme.R`
+        
+        bslib::page_sidebar(
+          sidebar = navsetCardTabSidebar, # `scr##_navsetCardTabSidebar.R`
+          navsetCardTab, # `scr##_navsetCardTab.R`
+        ),
+        
+        shiny::htmlOutput(outputId = "figureHelpText"),
+        shiny::htmlOutput(outputId = "figureFooter")
+      )
     )
-  )
 
 
 # Server --------------------
