@@ -94,6 +94,10 @@
   font-weight: bold;
 }
 
+.data-display-title {
+  padding-bottom: 1rem !important;
+}
+
 .data-options-title {
   padding-bottom: 1rem !important;
 }

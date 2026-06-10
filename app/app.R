@@ -8,28 +8,29 @@ ui <-
   htmltools::htmlTemplate(
     filename = "azmet-shiny-template.html",
     
-    pageSidebarBatteryVoltageViewer = 
-      bslib::page_sidebar(
+    pageBatteryVoltageViewer = 
+      bslib::page(
         title = NULL,
-        sidebar = pageSidebar, # `scr##_pageSidebar.R`
         theme = theme, # `scr##_theme.R`
         
-        bslib::page_sidebar(
-          sidebar = navsetCardTabSidebar, # `scr##_navsetCardTabSidebar.R`
-          navsetCardTab, # `scr##_navsetCardTab.R`
+        bslib::layout_sidebar(
+          sidebar = pageSidebar, # `scr##_pageSidebar.R`
+          shiny::uiOutput(outputId = "navsetCardTab")
         ),
         
         shiny::htmlOutput(outputId = "figureHelpText"),
-        shiny::htmlOutput(outputId = "figureFooter")
+        shiny::htmlOutput(outputId = "pageBottomText") # Common, regardless of card tab
       )
-    )
+  )
 
 
 # Server --------------------
 
 server <- 
   function(input, output, session) {
-    
+    shinyjs::useShinyjs(html = TRUE)
+    # shinyjs::hideElement(id = "navsetCardTabSidebar")
+    # shinyjs::hideElement(id = "pageBottomText")
     
     # Observables -----
     
@@ -37,6 +38,14 @@ server <-
       if (input$startDate > input$endDate) {
         shiny::showModal(datepickerErrorModal) # `scr##_datepickerErrorModal.R`
       }
+      
+      shinyjs::showElement(id = "navsetCardTab")
+      # shinyjs::showElement(id = "navsetCardTabSidebar")
+      # shinyjs::showElement(id = "pageBottomText")
+      
+      showNavsetCardTab(TRUE)
+      # showNavsetCardTabSidebar(TRUE)
+      # showPageBottomText(TRUE)
     })
     
     
@@ -69,17 +78,17 @@ server <-
         )
       })
     
-    figureFooter <- 
-      shiny::eventReactive(dataAZMetDataELT(), {
-        fxnFigureFooter(timeStep = "Daily")
-      })
-    
     figureHelpText <- 
       shiny::eventReactive(dataAZMetDataELT(), {
         fxnFigureHelpText(
           startDate = input$startDate,
           endDate = input$endDate
         )
+      })
+    
+    pageBottomText <- 
+      shiny::eventReactive(dataAZMetDataELT(), {
+        fxnPageBottomText()
       })
     
     scatterplot <- 
@@ -105,15 +114,21 @@ server <-
     
     # Outputs -----
     
-    output$figureFooter <-
-      shiny::renderUI({
-        figureFooter()}
-      )
-    
     output$figureHelpText <- 
       shiny::renderUI({
         figureHelpText()
       })
+    
+    output$navsetCardTab <- 
+      shiny::renderUI({
+        shiny::req(showNavsetCardTab())
+        navsetCardTab # `scr##_navsetCardTab.R`
+      })
+    
+    output$pageBottomText <-
+      shiny::renderUI({
+        pageBottomText()}
+      )
     
     output$scatterplot <- 
       plotly::renderPlotly(scatterplot())

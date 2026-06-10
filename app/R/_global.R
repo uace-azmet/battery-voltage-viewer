@@ -9,8 +9,9 @@ library(lubridate)
 library(magrittr)
 library(plotly)
 library(shiny)
+library(shinyjs)
 library(tibble)
-library(vroom)
+# library(vroom)
 
 
 # Files --------------------
@@ -48,6 +49,10 @@ batteryVariables <-
     variable = 
       c("Voltage maximum (V)", "Voltage average (V)", "Voltage minimum (V)")
   )
+
+showNavsetCardTab <- shiny::reactiveVal(FALSE)
+# showNavsetCardTabSidebar <- shiny::reactiveVal(FALSE)
+# showPageBottomText <- shiny::reactiveVal(FALSE)
 
 weatherVariables <- 
   tibble::tibble(

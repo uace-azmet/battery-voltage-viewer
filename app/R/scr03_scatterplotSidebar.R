@@ -1,9 +1,9 @@
-navsetCardTabSidebar <- 
+scatterplotSidebar <- 
   bslib::sidebar(
     width = 300,
     position = "left",
     open = list(desktop = "open", mobile = "always-above"),
-    id = "sidebar",
+    id = "scatterplotSidebar",
     title = NULL,
     bg = "#FFFFFF",
     fg = "#191919",
@@ -13,7 +13,7 @@ navsetCardTabSidebar <-
     padding = NULL,
     
     bslib::accordion(
-      id = "navsetCardTabAccordion",
+      id = "scatterplotAccordion",
       # open = NULL,
       # multiple = TRUE,
       class = NULL,
