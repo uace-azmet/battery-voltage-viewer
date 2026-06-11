@@ -42,7 +42,8 @@ fxnAZMetDataELT <- function(
     "sol_rad_total", 
     "temp_air_maxC", 
     "temp_air_meanC", 
-    "temp_air_minC"
+    "temp_air_minC",
+    "dwpt_mean"
   )
   
   # For case of empty data return

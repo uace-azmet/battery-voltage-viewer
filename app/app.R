@@ -36,37 +36,88 @@ server <-
     
     # Observables -----
     
+    # shiny::observeEvent(input$sidebarScatterplot, {
+    #   print(paste0("Sidebar Scatterplot: ", input$sidebarScatterplot))
+    #   print(paste0("Sidebar Time Series: ", input$sidebarTimeSeries))
+    #   
+    #   if (input$sidebarScatterplot != sidebarState()) {
+    #     sidebarState(input$sidebarScatterplot)
+    #     bslib::sidebar_toggle(id = "sidebarTimeSeries", open = input$sidebarScatterplot)
+    #   }
+    #   
+    #   # Trigger a window resize so the main panel outputs re-render
+    #   shinyjs::runjs("$(window).trigger('resize');")
+    #   
+    #   print(paste0("Sidebar Status: ", sidebarState()))
+    #   print(paste0("Sidebar Time Series: ", input$sidebarTimeSeries))
+    # })
+    # 
+    # shiny::observeEvent(input$sidebarTimeSeries, {
+    #   print(paste0("Sidebar Time Series: ", input$sidebarTimeSeries))
+    #   print(paste0("Sidebar Scatterplot: ", input$sidebarScatterplot))
+    # 
+    #   if (input$sidebarScatterplot != sidebarState()) {
+    #     sidebarState(input$sidebarTimeSeries)
+    #     bslib::sidebar_toggle(id = "sidebarScatterplot", open = input$sidebarTimeSeries)
+    #   }
+    #   
+    #   # Trigger a window resize so the main panel outputs re-render
+    #   shinyjs::runjs("$(window).trigger('resize');")
+    # 
+    #   print(paste0("Sidebar Status: ", sidebarState()))
+    #   print(paste0("Sidebar Scatterplot: ", input$sidebarScatterplot))
+    # })
+    
+    
+    
+    
+    
+    
     shiny::observeEvent(input$azmetStationScatterplot, {
       azmetStation(input$azmetStationScatterplot)
-      print(azmetStation())
+      print(paste0("Station Scatterplot: ", azmetStation()))
       
       shiny::updateSelectInput(
         inputId = "azmetStationTimeSeries",
         label = "AZMet Station",
-        choices = 
-          c(
-            "Select a station..." = "",
-            sort(azmetStationMetadata$meta_station_name)
-          ),
-        # selected = azmetStationMetadata$meta_station_name[1]
+        choices = c("Select a station..." = "", sort(azmetStationMetadata$meta_station_name)),
         selected = azmetStation() # Reactive value initialized in `_global.R`
       )
     })
 
     shiny::observeEvent(input$azmetStationTimeSeries, {
       azmetStation(input$azmetStationTimeSeries)
-      print(azmetStation())
+      print(paste0("Station Time Series: ", azmetStation()))
       
       shiny::updateSelectInput(
         inputId = "azmetStationScatterplot",
         label = "AZMet Station",
-        choices = 
-          c(
-            "Select a station..." = "",
-            sort(azmetStationMetadata$meta_station_name)
-          ),
-        # selected = azmetStationMetadata$meta_station_name[1]
+        choices = c("Select a station..." = "", sort(azmetStationMetadata$meta_station_name)),
         selected = azmetStation() # Reactive value initialized in `_global.R`
+      )
+    })
+    
+    shiny::observeEvent(input$batteryVariableScatterplot, {
+      batteryVariable(input$batteryVariableScatterplot)
+      print(paste0("Battery Scatterplot: ", batteryVariable()))
+      
+      shiny::updateSelectInput(
+        inputId = "batteryVariableTimeSeries",
+        label = "Battery Variable",
+        choices = c("Select a variable..." = "", sort(batteryVariables$variable)),
+        selected = batteryVariable() # Reactive value initialized in `_global.R`
+      )
+    })
+    
+    shiny::observeEvent(input$batteryVariableTimeSeries, {
+      batteryVariable(input$batteryVariableTimeSeries)
+      print(paste0("Battery Time Series: ", batteryVariable()))
+      
+      shiny::updateSelectInput(
+        inputId = "batteryVariableScatterplot",
+        label = "Battery Variable",
+        choices = c("Select a variable..." = "", sort(batteryVariables$variable)),
+        selected = batteryVariable() # Reactive value initialized in `_global.R`
       )
     })
     
@@ -82,6 +133,30 @@ server <-
       showNavsetCardTab(TRUE)
       # showNavsetCardTabSidebar(TRUE)
       # showPageBottomText(TRUE)
+    })
+    
+    shiny::observeEvent(input$weatherVariableScatterplot, {
+      weatherVariable(input$weatherVariableScatterplot)
+      print(paste0("Weather Scatterplot: ", weatherVariable()))
+      
+      shiny::updateSelectInput(
+        inputId = "weatherVariableTimeSeries",
+        label = "Weather Variable",
+        choices = c("Select a variable..." = "", sort(weatherVariables$variable)),
+        selected = weatherVariable() # Reactive value initialized in `_global.R`
+      )
+    })
+    
+    shiny::observeEvent(input$weatherVariableTimeSeries, {
+      weatherVariable(input$weatherVariableTimeSeries)
+      print(paste0("Weather Time Series: ", weatherVariable()))
+      
+      shiny::updateSelectInput(
+        inputId = "weatherVariableScatterplot",
+        label = "Weather Variable",
+        choices = c("Select a variable..." = "", sort(weatherVariables$variable)),
+        selected = weatherVariable() # Reactive value initialized in `_global.R`
+      )
     })
     
     
@@ -129,7 +204,7 @@ server <-
     
     scatterplot <- 
       shiny::reactive({
-        shiny::req(azmetStation())
+        shiny::req(azmetStation(), batteryVariable(), weatherVariable())
         
         fxnScatterplot(
           inData = dataAZMetDataELT(),
@@ -141,7 +216,7 @@ server <-
     
     timeSeries <- 
       shiny::reactive({
-        shiny::req(azmetStation())
+        shiny::req(azmetStation(), batteryVariable(), weatherVariable())
         
         fxnTimeSeries(
           inData = dataAZMetDataELT(),

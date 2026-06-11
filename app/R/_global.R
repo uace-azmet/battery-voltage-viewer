@@ -27,6 +27,8 @@ library(tibble)
 # Variables --------------------
 
 
+azmetStation <- shiny::reactiveVal(value = NULL)
+
 azmetStationMetadata <- azmetr::station_info |>
   dplyr::mutate(end_date = NA) |> # Placeholder until inactive stations are in API and `azmetr`
   dplyr::mutate(
@@ -39,9 +41,9 @@ azmetStationMetadata <- azmetr::station_info |>
   dplyr::filter(status == "active") |>
   dplyr::arrange(meta_station_name)
 
-azmetStation <- shiny::reactiveVal(value = NULL) #azmetStationMetadata$meta_station_name[1]
-
 batVoltStartDate <- lubridate::date("2021-01-01")
+
+batteryVariable <- shiny::reactiveVal(value = NULL)
 
 batteryVariables <- 
   tibble::tibble(
@@ -56,6 +58,10 @@ showNavsetCardTab <- shiny::reactiveVal(FALSE)
 # showNavsetCardTabSidebar <- shiny::reactiveVal(FALSE)
 # showPageBottomText <- shiny::reactiveVal(FALSE)
 
+sidebarState <- shiny::reactiveVal(TRUE)
+
+weatherVariable <- shiny::reactiveVal(value = NULL)
+
 weatherVariables <- 
   tibble::tibble(
     name = 
@@ -66,7 +72,8 @@ weatherVariables <-
         "sol_rad_total",
         "temp_air_maxC", 
         "temp_air_meanC", 
-        "temp_air_minC"
+        "temp_air_minC",
+        "dwpt_mean"
       ),
     
     variable = 
@@ -77,6 +84,7 @@ weatherVariables <-
         "Solar Radiation total (MJ/m^2)",
         "Air Temperature maximum (°C)", 
         "Air Temperature average (°C)", 
-        "Air Temperature minimum (°C)"
+        "Air Temperature minimum (°C)",
+        "Dew Point Temperature (°C)"
       )
   )
