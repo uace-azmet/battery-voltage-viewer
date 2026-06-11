@@ -26,18 +26,52 @@ ui <-
 
 # Server --------------------
 
+
 server <- 
   function(input, output, session) {
     shinyjs::useShinyjs(html = TRUE)
     # shinyjs::hideElement(id = "navsetCardTabSidebar")
     # shinyjs::hideElement(id = "pageBottomText")
     
+    
     # Observables -----
+    
+    shiny::observeEvent(input$azmetStationScatterplot, {
+      shiny::updateSelectInput(
+        inputId = "azmetStationTimeSeries",
+        label = "AZMet Station",
+        choices = azmetStationMetadata$meta_station_name,
+        selected = azmetStation(input$azmetStationScatterplot) # Reactive value initialized in `_global.R`
+      )
+    })
+    
+    shiny::observeEvent(input$azmetStationTimeSeries, {
+      shiny::updateSelectInput(
+        inputId = "azmetStationScatterplot",
+        label = "AZMet Station",
+        choices = azmetStationMetadata$meta_station_name,
+        selected = azmetStation(input$azmetStationTimeSeries) # Reactive value initialized in `_global.R`
+      )
+    })
     
     shiny::observeEvent(input$retrieveData, {
       if (input$startDate > input$endDate) {
         shiny::showModal(datepickerErrorModal) # `scr##_datepickerErrorModal.R`
       }
+      
+      shiny::updateSelectInput(
+        inputId = "azmetStationScatterplot",
+        label = "AZMet Station",
+        choices = sort(azmetStationMetadata$meta_station_name),
+        selected = azmetStation() # Reactive value initialized in `_global.R`
+      )
+      
+      shiny::updateSelectInput(
+        inputId = "azmetStationTimeSeries",
+        label = "AZMet Station",
+        choices = azmetStationMetadata$meta_station_name,
+        selected = azmetStation() # Reactive value initialized in `_global.R`
+      )
       
       shinyjs::showElement(id = "navsetCardTab")
       # shinyjs::showElement(id = "navsetCardTabSidebar")
@@ -95,9 +129,9 @@ server <-
       shiny::reactive({
         fxnScatterplot(
           inData = dataAZMetDataELT(),
-          azmetStation = input$azmetStation,
-          batteryVariable = input$batteryVariable,
-          weatherVariable = input$weatherVariable
+          azmetStation = input$azmetStationScatterplot,
+          batteryVariable = input$batteryVariableScatterplot,
+          weatherVariable = input$weatherVariableScatterplot
         )
       })
     
@@ -105,9 +139,9 @@ server <-
       shiny::reactive({
         fxnTimeSeries(
           inData = dataAZMetDataELT(),
-          azmetStation = input$azmetStation,
-          batteryVariable = input$batteryVariable,
-          weatherVariable = input$weatherVariable
+          azmetStation = input$azmetStationTimeSeries,
+          batteryVariable = input$batteryVariableTimeSeries,
+          weatherVariable = input$weatherVariableTimeSeries
         )
       })
     

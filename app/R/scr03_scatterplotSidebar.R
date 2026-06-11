@@ -36,24 +36,27 @@ scatterplotSidebar <-
       ),
       
       shiny::selectInput(
-        inputId = "azmetStation", 
+        inputId = "azmetStationScatterplot", 
         label = "AZMet Station",
         choices = azmetStationMetadata$meta_station_name,
-        selected = azmetStationMetadata$meta_station_name[1]
+        # selected = azmetStationMetadata$meta_station_name[1]
+        selected = NULL
       ),
         
       shiny::selectInput(
-        inputId = "batteryVariable", 
+        inputId = "batteryVariableScatterplot", 
         label = "Battery Variable",
         choices = batteryVariables[order(batteryVariables$variable), ]$variable,
         selected = batteryVariables[order(batteryVariables$variable), ]$variable[1]
+        # selected = NULL
       ),
         
       shiny::selectInput(
-        inputId = "weatherVariable", 
+        inputId = "weatherVariableScatterplot", 
         label = "Weather Variable",
         choices = weatherVariables[order(weatherVariables$variable), ]$variable,
         selected = weatherVariables[order(weatherVariables$variable), ]$variable[1]
+        # selected = NULL
       )
     ) # bslib::accordion()
   ) # bslib::sidebar()

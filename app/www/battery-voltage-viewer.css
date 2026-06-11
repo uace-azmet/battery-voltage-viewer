@@ -281,18 +281,18 @@
 }
 
 .selectize-dropdown .active {
-  background-color: rgb(226, 233, 235); 
-  color: var(--bs-body-color);
+  background-color: rgb(226, 233, 235) !important; 
+  color: var(--bs-body-color) !important;
 }
 
 .selectize-dropdown .active:not(.selected) {
-  background-color: rgb(226, 233, 235); 
-  color: var(--bs-body-color);
+  background-color: rgb(226, 233, 235) !important; 
+  color: var(--bs-body-color) !important;
 }
 
 .selectize-dropdown .selected:not(.active) {
-  background-color: var(--bs-body-bg); 
-  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg) !important; 
+  color: var(--bs-body-color) !important;
 }
 
 .selectize-input {
