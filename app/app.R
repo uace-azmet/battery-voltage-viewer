@@ -133,7 +133,7 @@ server <-
     
     # Reactives -----
     
-    dataAZMetDataELT <- 
+    azDaily <- 
       shiny::eventReactive(input$retrieveData, {
         shiny::validate(
           shiny::need(
@@ -153,7 +153,7 @@ server <-
         
         on.exit(shiny::removeNotification(id = idRetrievingData), add = TRUE)
         
-        fxnAZMetDataELT(
+        fxn_azDaily(
           azmetStation = NULL, 
           startDate = input$startDate, 
           endDate = input$endDate
@@ -161,24 +161,24 @@ server <-
       })
     
     figureHelpText <- 
-      shiny::eventReactive(dataAZMetDataELT(), {
-        fxnFigureHelpText(
+      shiny::eventReactive(azDaily(), {
+        fxn_figureHelpText(
           startDate = input$startDate,
           endDate = input$endDate
         )
       })
     
     pageBottomText <- 
-      shiny::eventReactive(dataAZMetDataELT(), {
-        fxnPageBottomText()
+      shiny::eventReactive(azDaily(), {
+        fxn_pageBottomText()
       })
     
     scatterplot <- 
       shiny::reactive({
         shiny::req(azmetStation(), batteryVariable(), weatherVariable())
         
-        fxnScatterplot(
-          inData = dataAZMetDataELT(),
+        fxn_scatterplot(
+          inData = azDaily(),
           azmetStation = input$azmetStationScatterplot,
           batteryVariable = input$batteryVariableScatterplot,
           weatherVariable = input$weatherVariableScatterplot
@@ -189,8 +189,8 @@ server <-
       shiny::reactive({
         shiny::req(azmetStation(), batteryVariable(), weatherVariable())
         
-        fxnTimeSeries(
-          inData = dataAZMetDataELT(),
+        fxn_timeSeries(
+          inData = azDaily(),
           azmetStation = input$azmetStationTimeSeries,
           batteryVariable = input$batteryVariableTimeSeries,
           weatherVariable = input$weatherVariableTimeSeries
@@ -213,8 +213,8 @@ server <-
     
     output$pageBottomText <-
       shiny::renderUI({
-        pageBottomText()}
-      )
+        pageBottomText()
+      })
     
     output$scatterplot <- 
       plotly::renderPlotly(scatterplot())

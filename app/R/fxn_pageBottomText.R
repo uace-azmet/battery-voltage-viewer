@@ -1,9 +1,9 @@
-#' `fxnPageBottomText.R` - Build supporting text for page
+#' `fxn_pageBottomText.R` - Build supporting text for page
 #' 
 #' @return `pageBottomText` - Supporting text for page
 
 
-fxnPageBottomText <- 
+fxn_pageBottomText <- 
   function() {
     
     # Define inputs -----

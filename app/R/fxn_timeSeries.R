@@ -1,10 +1,10 @@
-#' `fxnScatterplot.R` Generate scatterplot based on user input
+#' `fxn_timeSeries.R` Generate time series graph based on user input
 #' 
 #' @param inData - daily AZMet data from `dataAZMetDataELT()`
 #' @param azmetStation - user-specified AZMet station
 #' @param batteryVariable - user-specified battery variable
 #' @param weatherVariable - user-specified weather variable
-#' @return `scatterplot` - scatterplot based on user input
+#' @return `timeSeries` - time series graphs based on user input
 
 # https://plotly-r.com/ 
 # https://plotly.com/r/reference/ 
@@ -12,84 +12,107 @@
 # https://github.com/plotly/plotly.js/blob/c1ef6911da054f3b16a7abe8fb2d56019988ba14/src/components/fx/hover.js#L1596
 
 
-fxnScatterplot <- 
+fxn_timeSeries <- 
   function(inData, azmetStation, batteryVariable, weatherVariable) {
     
     dataOtherStations <- inData %>% 
-      dplyr::filter(meta_station_name != azmetStation)
+      dplyr::filter(meta_station_name != azmetStation) %>%
+      dplyr::group_by(meta_station_name)
     
     dataSelectedStation <- inData %>% 
       dplyr::filter(meta_station_name == azmetStation)
     
-    lmFit <- 
-      stats::lm(
-        dataSelectedStation[[batteryVariable]] ~ dataSelectedStation[[weatherVariable]], 
-        data = dataSelectedStation,
-        na.action = na.exclude
-      )
-    
-    scatterplot <- 
-      plotly::plot_ly( # Points for `dataOtherStations`
+    batteryVariableTimeSeries <- 
+      plotly::plot_ly( # Lines for `dataOtherStations`
         data = dataOtherStations,
-        x = ~.data[[weatherVariable]],
+        x = ~datetime,
         y = ~.data[[batteryVariable]],
         type = "scatter",
-        mode = "markers",
-        marker = 
+        mode = "lines",
+        marker = NULL,
+        line = 
           list(
-            size = 8,
-            color = "rgba(201, 201, 201, 1.0)",
-            line = list(
-              color = "rgba(152, 152, 152, 1.0)",
-              width = 1
-            )
+            color = "rgba(201, 201, 201, 1.0)", 
+            width = 1
+          ),
+        name = "other station data",
+        hoverinfo = "text",
+        text = 
+          ~paste0(
+            "<br><b>", batteryVariable, ":</b>  ", .data[[batteryVariable]],
+            "<br><b>AZMet station:</b>  ", meta_station_name,
+            "<br><b>Measurement date:</b>  ", gsub(" 0", " ", format(datetime, "%b %d, %Y"))
+          ),
+        showlegend = TRUE,
+        legendgroup = "dataOtherStations"
+      ) %>%
+      
+      plotly::add_trace( # Lines for `dataSelectedStation`
+        data = dataSelectedStation,
+        x = ~datetime,
+        y = ~.data[[batteryVariable]],
+        type = "scatter",
+        mode = "lines",
+        marker = NULL,
+        line = 
+          list(
+            color = "rgba(89, 89, 89, 1.0)", 
+            width = 2
+          ),
+        name = paste0(azmetStation, " station data"),
+        showlegend = FALSE,
+        legendgroup = "dataSelectedStation"
+      )
+    
+    weatherVariableTimeSeries <- 
+      plotly::plot_ly( # Lines for `dataOtherStations`
+        data = dataOtherStations,
+        x = ~datetime,
+        y = ~.data[[weatherVariable]],
+        type = "scatter",
+        mode = "lines",
+        marker = NULL,
+        line = 
+          list(
+            color = "rgba(201, 201, 201, 1.0)", 
+            width = 1
           ),
         name = "other station data",
         hoverinfo = "text",
         text = 
           ~paste0(
             "<br><b>", weatherVariable, ":</b>  ", .data[[weatherVariable]],
-            "<br><b>", batteryVariable, ":</b>  ", .data[[batteryVariable]],
             "<br><b>AZMet station:</b>  ", meta_station_name,
             "<br><b>Measurement date:</b>  ", gsub(" 0", " ", format(datetime, "%b %d, %Y"))
           ),
-        showlegend = TRUE
+        showlegend = FALSE,
+        legendgroup = "dataOtherStations"
       ) %>%
       
-      plotly::add_trace( # Points for `dataSelectedStation`
+      plotly::add_trace( # Lines for `dataSelectedStation`
         data = dataSelectedStation,
-        x = ~.data[[weatherVariable]],
-        y = ~.data[[batteryVariable]],
-        type = "scatter",
-        mode = "markers",
-        marker = 
-          list(
-            size = 8,
-            color = "rgba(89, 89, 89, 1.0)",
-            line = list(
-              color = "rgba(13, 13, 13, 1.0)",
-              width = 1
-            )
-          ),
-        name = paste0(azmetStation, " station data"),
-        showlegend = TRUE
-      ) %>%
-      
-      plotly::add_trace( # Trend line for `dataSelectedStation` points
-        data = dataSelectedStation,
-        x = ~.data[[weatherVariable]],
-        y = stats::predict(lmFit, type = "response"), 
+        x = ~datetime,
+        y = ~.data[[weatherVariable]],
         type = "scatter",
         mode = "lines",
         marker = NULL,
         line = 
           list(
-            color = "rgba(13, 13, 13, 1.0)", 
+            color = "rgba(89, 89, 89, 1.0)", 
             width = 2
           ),
-        name = paste0(azmetStation, " station data trend"),
-        hoverinfo = "skip",
-        showlegend = TRUE
+        name = paste0(azmetStation, " station data"),
+        showlegend = TRUE,
+        legendgroup = "dataSelectedStation"
+      )
+    
+    timeSeries <- 
+      plotly::subplot(
+        batteryVariableTimeSeries, 
+        weatherVariableTimeSeries, 
+        margin = 0.05,
+        nrows = 2,
+        shareX = TRUE
       ) %>%
       
       plotly::config(
@@ -107,7 +130,7 @@ fxnScatterplot <-
         toImageButtonOptions = 
           list(
             format = "png", # Either png, svg, jpeg, or webp
-            filename = "AZMet-battery-voltage-viewer-scatterplot",
+            filename = "AZMet-battery-voltage-viewer-time-series",
             height = 500,
             width = 700,
             scale = 5
@@ -146,36 +169,38 @@ fxnScatterplot <-
           list(
             l = 0,
             r = 50, # For space between plot and modebar
-            b = 70, # For space between x-axis title and caption or figure help text
+            b = 80, # For space between x-axis title and caption or figure help text
             t = 0,
             pad = 0
           ),
-        modebar = 
-          list(
-            bgcolor = "#FFFFFF",
-            orientation = "v"
+        modebar = list(bgcolor = "#FFFFFF", orientation = "v"),
+        xaxis = list(
+          title = list(
+            font = list(size = 14),
+            standoff = 25,
+            text = "<b>Date</b>"
           ),
-        xaxis = 
-          list(
-            title = 
-              list(
-                font = list(size = 14),
-                standoff = 25,
-                text = ~paste0("<b>", weatherVariable, "</b>")
-              ),
-            zeroline = FALSE
+          zeroline = FALSE
+        ),
+        yaxis = list(
+          title = list(
+            font = list(size = 14),
+            standoff = 25,
+            text = ~paste0("<b>", batteryVariable, "</b>")
           ),
-        yaxis = 
-          list(
-            title = 
-              list(
-                font = list(size = 14),
-                standoff = 25,
-                text = ~paste0("<b>", batteryVariable, "</b>")
-              ),
-            zeroline = FALSE
-          )
+          zeroline = FALSE
+        ),
+        yaxis2 = list(
+          title = list(
+            font = list(
+              size = 14
+            ),
+            standoff = 25,
+            text = ~paste0("<b>", weatherVariable, "</b>")
+          ),
+          zeroline = FALSE
+        )
       )
     
-    return(scatterplot)
+    return(timeSeries)
   }
