@@ -37,20 +37,36 @@ server <-
     # Observables -----
     
     shiny::observeEvent(input$azmetStationScatterplot, {
+      azmetStation(input$azmetStationScatterplot)
+      print(azmetStation())
+      
       shiny::updateSelectInput(
         inputId = "azmetStationTimeSeries",
         label = "AZMet Station",
-        choices = azmetStationMetadata$meta_station_name,
-        selected = azmetStation(input$azmetStationScatterplot) # Reactive value initialized in `_global.R`
+        choices = 
+          c(
+            "Select a station..." = "",
+            sort(azmetStationMetadata$meta_station_name)
+          ),
+        # selected = azmetStationMetadata$meta_station_name[1]
+        selected = azmetStation() # Reactive value initialized in `_global.R`
       )
     })
-    
+
     shiny::observeEvent(input$azmetStationTimeSeries, {
+      azmetStation(input$azmetStationTimeSeries)
+      print(azmetStation())
+      
       shiny::updateSelectInput(
         inputId = "azmetStationScatterplot",
         label = "AZMet Station",
-        choices = azmetStationMetadata$meta_station_name,
-        selected = azmetStation(input$azmetStationTimeSeries) # Reactive value initialized in `_global.R`
+        choices = 
+          c(
+            "Select a station..." = "",
+            sort(azmetStationMetadata$meta_station_name)
+          ),
+        # selected = azmetStationMetadata$meta_station_name[1]
+        selected = azmetStation() # Reactive value initialized in `_global.R`
       )
     })
     
@@ -58,20 +74,6 @@ server <-
       if (input$startDate > input$endDate) {
         shiny::showModal(datepickerErrorModal) # `scr##_datepickerErrorModal.R`
       }
-      
-      shiny::updateSelectInput(
-        inputId = "azmetStationScatterplot",
-        label = "AZMet Station",
-        choices = sort(azmetStationMetadata$meta_station_name),
-        selected = azmetStation() # Reactive value initialized in `_global.R`
-      )
-      
-      shiny::updateSelectInput(
-        inputId = "azmetStationTimeSeries",
-        label = "AZMet Station",
-        choices = azmetStationMetadata$meta_station_name,
-        selected = azmetStation() # Reactive value initialized in `_global.R`
-      )
       
       shinyjs::showElement(id = "navsetCardTab")
       # shinyjs::showElement(id = "navsetCardTabSidebar")
@@ -127,6 +129,8 @@ server <-
     
     scatterplot <- 
       shiny::reactive({
+        shiny::req(azmetStation())
+        
         fxnScatterplot(
           inData = dataAZMetDataELT(),
           azmetStation = input$azmetStationScatterplot,
@@ -137,6 +141,8 @@ server <-
     
     timeSeries <- 
       shiny::reactive({
+        shiny::req(azmetStation())
+        
         fxnTimeSeries(
           inData = dataAZMetDataELT(),
           azmetStation = input$azmetStationTimeSeries,

@@ -39,7 +39,7 @@ azmetStationMetadata <- azmetr::station_info |>
   dplyr::filter(status == "active") |>
   dplyr::arrange(meta_station_name)
 
-azmetStation <- shiny::reactiveVal(value = azmetStationMetadata$meta_station_name[1])
+azmetStation <- shiny::reactiveVal(value = NULL) #azmetStationMetadata$meta_station_name[1]
 
 batVoltStartDate <- lubridate::date("2021-01-01")
 

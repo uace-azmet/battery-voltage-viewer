@@ -38,7 +38,12 @@ scatterplotSidebar <-
       shiny::selectInput(
         inputId = "azmetStationScatterplot", 
         label = "AZMet Station",
-        choices = azmetStationMetadata$meta_station_name,
+        # choices = azmetStationMetadata$meta_station_name,
+        choices = 
+          c(
+            "Select a station..." = "",
+            sort(azmetStationMetadata$meta_station_name)
+          ),
         # selected = azmetStationMetadata$meta_station_name[1]
         selected = NULL
       ),
