@@ -58,8 +58,6 @@ showNavsetCardTab <- shiny::reactiveVal(FALSE)
 # showNavsetCardTabSidebar <- shiny::reactiveVal(FALSE)
 # showPageBottomText <- shiny::reactiveVal(FALSE)
 
-sidebarState <- shiny::reactiveVal(TRUE)
-
 weatherVariable <- shiny::reactiveVal(value = NULL)
 
 weatherVariables <- 

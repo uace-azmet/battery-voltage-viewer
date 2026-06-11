@@ -2,7 +2,7 @@ sidebarScatterplot <-
   bslib::sidebar(
     width = 300,
     position = "left",
-    # open = list(desktop = "open", mobile = "always-above"),
+    open = NULL,
     id = "sidebarScatterplot",
     title = NULL,
     bg = "#FFFFFF",

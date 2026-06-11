@@ -36,43 +36,6 @@ server <-
     
     # Observables -----
     
-    # shiny::observeEvent(input$sidebarScatterplot, {
-    #   print(paste0("Sidebar Scatterplot: ", input$sidebarScatterplot))
-    #   print(paste0("Sidebar Time Series: ", input$sidebarTimeSeries))
-    #   
-    #   if (input$sidebarScatterplot != sidebarState()) {
-    #     sidebarState(input$sidebarScatterplot)
-    #     bslib::sidebar_toggle(id = "sidebarTimeSeries", open = input$sidebarScatterplot)
-    #   }
-    #   
-    #   # Trigger a window resize so the main panel outputs re-render
-    #   shinyjs::runjs("$(window).trigger('resize');")
-    #   
-    #   print(paste0("Sidebar Status: ", sidebarState()))
-    #   print(paste0("Sidebar Time Series: ", input$sidebarTimeSeries))
-    # })
-    # 
-    # shiny::observeEvent(input$sidebarTimeSeries, {
-    #   print(paste0("Sidebar Time Series: ", input$sidebarTimeSeries))
-    #   print(paste0("Sidebar Scatterplot: ", input$sidebarScatterplot))
-    # 
-    #   if (input$sidebarScatterplot != sidebarState()) {
-    #     sidebarState(input$sidebarTimeSeries)
-    #     bslib::sidebar_toggle(id = "sidebarScatterplot", open = input$sidebarTimeSeries)
-    #   }
-    #   
-    #   # Trigger a window resize so the main panel outputs re-render
-    #   shinyjs::runjs("$(window).trigger('resize');")
-    # 
-    #   print(paste0("Sidebar Status: ", sidebarState()))
-    #   print(paste0("Sidebar Scatterplot: ", input$sidebarScatterplot))
-    # })
-    
-    
-    
-    
-    
-    
     shiny::observeEvent(input$azmetStationScatterplot, {
       azmetStation(input$azmetStationScatterplot)
       print(paste0("Station Scatterplot: ", azmetStation()))
@@ -119,6 +82,14 @@ server <-
         choices = c("Select a variable..." = "", sort(batteryVariables$variable)),
         selected = batteryVariable() # Reactive value initialized in `_global.R`
       )
+    })
+    
+    shiny::observeEvent(input$navsetCardTab, {
+      if (input$navsetCardTab == "scatterplot") {
+        bslib::toggle_sidebar(id = "sidebarScatterplot", open = input$sidebarTimeSeries)
+      } else if (input$navsetCardTab == "timeSeries") {
+        bslib::toggle_sidebar(id = "sidebarTimeSeries", open = input$sidebarScatterplot)
+      }
     })
     
     shiny::observeEvent(input$retrieveData, {
