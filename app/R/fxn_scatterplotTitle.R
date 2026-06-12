@@ -6,7 +6,7 @@
 
 
 fxn_scatterplotTitle <- 
-  function(startDate, endDate) {
+  function(inData, startDate, endDate) {
     
     scatterplotTitle <- 
       htmltools::p(
