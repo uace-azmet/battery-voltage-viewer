@@ -86,9 +86,9 @@ server <-
     
     shiny::observeEvent(input$navsetCardTab, {
       if (input$navsetCardTab == "scatterplot") {
-        bslib::toggle_sidebar(id = "sidebarScatterplot", open = input$sidebarTimeSeries)
+        bslib::toggle_sidebar(id = "scatterplotSidebar", open = input$timeSeriesSidebar)
       } else if (input$navsetCardTab == "timeSeries") {
-        bslib::toggle_sidebar(id = "sidebarTimeSeries", open = input$sidebarScatterplot)
+        bslib::toggle_sidebar(id = "timeSeriesSidebar", open = input$scatterplotSidebar)
       }
     })
     
