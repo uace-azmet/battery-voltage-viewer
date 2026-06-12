@@ -184,7 +184,7 @@ server <-
       })
     
     scatterplotTitle <-
-      shiny::reactive({
+      shiny::eventReactive(azDaily(), {
         shiny::req(azmetStation(), batteryVariable(), weatherVariable())
         
         fxn_scatterplotTitle(
@@ -206,7 +206,7 @@ server <-
       })
     
     timeSeriesTitle <-
-      shiny::reactive({
+      shiny::eventReactive(azDaily(), {
         shiny::req(azmetStation(), batteryVariable(), weatherVariable())
         
         fxn_timeSeriesTitle(
