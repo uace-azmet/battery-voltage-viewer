@@ -38,6 +38,22 @@ server <-
     shiny::observeEvent(azDaily(), {
       shinyjs::showElement(id = "navsetCardTab")
       showNavsetCardTab(TRUE)
+      
+      azmetStationChoices(sort(unique(azDaily()$meta_station_name)))
+      
+      shiny::updateSelectInput(
+        inputId = "azmetStationScatterplot",
+        label = "AZMet Station",
+        choices = c("Select a station..." = "", azmetStationChoices()),
+        selected = azmetStation() # Reactive value initialized in `_global.R`
+      )
+      
+      shiny::updateSelectInput(
+        inputId = "azmetStationTimeSeries",
+        label = "AZMet Station",
+        choices = c("Select a station..." = "", azmetStationChoices()),
+        selected = azmetStation() # Reactive value initialized in `_global.R`
+      )
     })
     
     shiny::observeEvent(input$azmetStationScatterplot, {
@@ -46,7 +62,7 @@ server <-
       shiny::updateSelectInput(
         inputId = "azmetStationTimeSeries",
         label = "AZMet Station",
-        choices = c("Select a station..." = "", sort(azmetStationMetadata$meta_station_name)),
+        choices = c("Select a station..." = "", unique(azmetStationChoices())),
         selected = azmetStation() # Reactive value initialized in `_global.R`
       )
     })
@@ -57,7 +73,7 @@ server <-
       shiny::updateSelectInput(
         inputId = "azmetStationScatterplot",
         label = "AZMet Station",
-        choices = c("Select a station..." = "", sort(azmetStationMetadata$meta_station_name)),
+        choices = c("Select a station..." = "", unique(azmetStationChoices())),
         selected = azmetStation() # Reactive value initialized in `_global.R`
       )
     })
@@ -168,7 +184,7 @@ server <-
       })
     
     scatterplotTitle <-
-      shiny::reactive({
+      shiny::eventReactive(azDaily(), {
         shiny::req(azmetStation(), batteryVariable(), weatherVariable())
         
         fxn_scatterplotTitle(
@@ -190,7 +206,7 @@ server <-
       })
     
     timeSeriesTitle <-
-      shiny::reactive({
+      shiny::eventReactive(azDaily(), {
         shiny::req(azmetStation(), batteryVariable(), weatherVariable())
         
         fxn_timeSeriesTitle(

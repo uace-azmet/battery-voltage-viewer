@@ -28,6 +28,8 @@ library(tibble)
 
 azmetStation <- shiny::reactiveVal(value = NULL)
 
+azmetStationChoices <- shiny::reactiveVal(value = NULL)
+
 azmetStationMetadata <- azmetr::station_info |>
   dplyr::mutate(end_date = NA) |> # Placeholder until inactive stations are in API and `azmetr`
   dplyr::mutate(
