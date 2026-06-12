@@ -11,7 +11,6 @@ library(plotly)
 library(shiny)
 library(shinyjs)
 library(tibble)
-# library(vroom)
 
 
 # Files --------------------
@@ -49,7 +48,6 @@ batteryVariables <-
   tibble::tibble(
     name = 
       c("meta_bat_volt_max", "meta_bat_volt_mean", "meta_bat_volt_min"),
-    
     variable = 
       c("Voltage maximum (V)", "Voltage average (V)", "Voltage minimum (V)")
   )
@@ -83,8 +81,6 @@ dailyVarsMeasure <- c(
 )
 
 showNavsetCardTab <- shiny::reactiveVal(FALSE)
-# showNavsetCardTabSidebar <- shiny::reactiveVal(FALSE)
-# showPageBottomText <- shiny::reactiveVal(FALSE)
 
 weatherVariable <- shiny::reactiveVal(value = NULL)
 
@@ -101,7 +97,6 @@ weatherVariables <-
         "temp_air_minC",
         "dwpt_mean"
       ),
-    
     variable = 
       c(
         "Relative Humidity maximum (%)", 

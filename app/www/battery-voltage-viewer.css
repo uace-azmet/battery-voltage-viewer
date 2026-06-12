@@ -27,7 +27,7 @@
 }
 
 .bslib-sidebar-layout {
-  padding-bottom: 24px;
+  padding-bottom: 0px;
 }
 
 /* https://stackoverflow.com/questions/77114751/is-it-possible-to-modify-the-arrow-that-collapses-the-sidebar */
@@ -95,10 +95,17 @@
 }
 
 .data-display-title {
+  margin-top: 24px !important;
   padding-bottom: 1rem !important;
 }
 
 .data-options-title {
+  margin-top: 24px !important;
+  padding-bottom: 1rem !important;
+}
+
+.date-selection-title {
+  margin-top: 24px !important;
   padding-bottom: 1rem !important;
 }
 
@@ -190,12 +197,15 @@
 }
 
 .modal-title {
-  font-weight: normal !important; 
+  color: #191919 !important;
+  font-size: 1rem;
+  /* font-weight: normal !important; */
   margin-top: 0px !important;
+  text-align: left;
 }
 
 .modebar-container {
-  top: -12px !important;
+  top: -8px !important;
 }
 
 .month:hover {
@@ -273,7 +283,7 @@
   color: #191919;
   padding-left: 24px;
   padding-right: 24px;
-  padding-top: 24px !important;
+  padding-top: 48px !important;
 }
 
 .prev:hover {
@@ -281,7 +291,7 @@
 }
 
 .scatterplot-title {
-  padding-bottom: 0.2rem !important;
+  padding-bottom: 10px !important;
   padding-top: 24px;
 }
 
@@ -321,13 +331,20 @@
   top: calc(50%) !important; 
 }
 
+.sidebar-content {
+  padding-bottom: 24px !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  padding-top: 24px !important;
+}
+
 .table-condensed {
   background-color: #FFFFFF; 
   color: var(--bs-body-color);
 }
 
 .time-series-title {
-  padding-bottom: 0.2rem !important;
+  padding-bottom: 10px !important;
   padding-top: 24px;
 }
 
@@ -387,8 +404,4 @@
   margin-left: 0px;
   margin-right: 1.5rem; */
   margin-top: 0px !important;
-}
-
-#startDate {
-  margin-top: 32px;
 }

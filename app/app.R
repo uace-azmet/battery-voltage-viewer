@@ -18,7 +18,6 @@ ui <-
           shiny::uiOutput(outputId = "navsetCardTab")
         ),
         
-        shiny::htmlOutput(outputId = "figureHelpText"),
         shiny::htmlOutput(outputId = "pageBottomText") # Common, regardless of card tab
       )
   )
@@ -29,16 +28,20 @@ ui <-
 
 server <- 
   function(input, output, session) {
+    
     shinyjs::useShinyjs(html = TRUE)
-    # shinyjs::hideElement(id = "navsetCardTabSidebar")
-    # shinyjs::hideElement(id = "pageBottomText")
+    shinyjs::hideElement(id = "navsetCardTabSidebar")
     
     
     # Observables -----
     
+    shiny::observeEvent(azDaily(), {
+      shinyjs::showElement(id = "navsetCardTab")
+      showNavsetCardTab(TRUE)
+    })
+    
     shiny::observeEvent(input$azmetStationScatterplot, {
       azmetStation(input$azmetStationScatterplot)
-      print(paste0("Station Scatterplot: ", azmetStation()))
       
       shiny::updateSelectInput(
         inputId = "azmetStationTimeSeries",
@@ -50,7 +53,6 @@ server <-
 
     shiny::observeEvent(input$azmetStationTimeSeries, {
       azmetStation(input$azmetStationTimeSeries)
-      print(paste0("Station Time Series: ", azmetStation()))
       
       shiny::updateSelectInput(
         inputId = "azmetStationScatterplot",
@@ -62,7 +64,6 @@ server <-
     
     shiny::observeEvent(input$batteryVariableScatterplot, {
       batteryVariable(input$batteryVariableScatterplot)
-      print(paste0("Battery Scatterplot: ", batteryVariable()))
       
       shiny::updateSelectInput(
         inputId = "batteryVariableTimeSeries",
@@ -74,7 +75,6 @@ server <-
     
     shiny::observeEvent(input$batteryVariableTimeSeries, {
       batteryVariable(input$batteryVariableTimeSeries)
-      print(paste0("Battery Time Series: ", batteryVariable()))
       
       shiny::updateSelectInput(
         inputId = "batteryVariableScatterplot",
@@ -96,19 +96,10 @@ server <-
       if (input$startDate > input$endDate) {
         shiny::showModal(datepickerErrorModal) # `scr##_datepickerErrorModal.R`
       }
-      
-      shinyjs::showElement(id = "navsetCardTab")
-      # shinyjs::showElement(id = "navsetCardTabSidebar")
-      # shinyjs::showElement(id = "pageBottomText")
-      
-      showNavsetCardTab(TRUE)
-      # showNavsetCardTabSidebar(TRUE)
-      # showPageBottomText(TRUE)
     })
     
     shiny::observeEvent(input$weatherVariableScatterplot, {
       weatherVariable(input$weatherVariableScatterplot)
-      print(paste0("Weather Scatterplot: ", weatherVariable()))
       
       shiny::updateSelectInput(
         inputId = "weatherVariableTimeSeries",
@@ -120,7 +111,6 @@ server <-
     
     shiny::observeEvent(input$weatherVariableTimeSeries, {
       weatherVariable(input$weatherVariableTimeSeries)
-      print(paste0("Weather Time Series: ", weatherVariable()))
       
       shiny::updateSelectInput(
         inputId = "weatherVariableScatterplot",
@@ -156,14 +146,6 @@ server <-
         fxn_azDaily(
           azmetStation = NULL, 
           startDate = input$startDate, 
-          endDate = input$endDate
-        )
-      })
-    
-    figureHelpText <- 
-      shiny::eventReactive(azDaily(), {
-        fxn_figureHelpText(
-          startDate = input$startDate,
           endDate = input$endDate
         )
       })
@@ -251,8 +233,6 @@ server <-
       shiny::renderUI({
         timeSeriesTitle()
       })
-    
-    
   }
 
 

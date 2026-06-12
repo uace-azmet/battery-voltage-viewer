@@ -12,13 +12,13 @@ pageSidebar <-
     gap = NULL,
     padding = NULL,
     
-    bslib::accordion(
-      id = "pageAccordion",
-      # open = NULL,
-      # multiple = TRUE,
-      class = NULL,
-      width = "auto",
-      height = "auto",
+    # bslib::accordion(
+    #   id = "pageAccordion",
+    #   # open = NULL,
+    #   # multiple = TRUE,
+    #   class = NULL,
+    #   width = "auto",
+    #   height = "auto",
       
       # Visible elements
       
@@ -70,5 +70,5 @@ pageSidebar <-
         label = "RETRIEVE DATA",
         class = "btn btn-block btn-blue"
       )
-    ) # bslib::accordion()
+    # ) # bslib::accordion()
   ) # bslib::sidebar()
