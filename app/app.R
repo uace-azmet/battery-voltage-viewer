@@ -185,6 +185,16 @@ server <-
         )
       })
     
+    scatterplotTitle <-
+      shiny::reactive({
+        shiny::req(azmetStation(), batteryVariable(), weatherVariable())
+        
+        fxn_scatterplotTitle(
+          startDate = input$startDate,
+          endDate = input$endDate
+        )
+      })
+    
     timeSeries <- 
       shiny::reactive({
         shiny::req(azmetStation(), batteryVariable(), weatherVariable())
@@ -194,6 +204,16 @@ server <-
           azmetStation = input$azmetStationTimeSeries,
           batteryVariable = input$batteryVariableTimeSeries,
           weatherVariable = input$weatherVariableTimeSeries
+        )
+      })
+    
+    timeSeriesTitle <-
+      shiny::reactive({
+        shiny::req(azmetStation(), batteryVariable(), weatherVariable())
+        
+        fxn_timeSeriesTitle(
+          startDate = input$startDate,
+          endDate = input$endDate
         )
       })
     
@@ -219,8 +239,20 @@ server <-
     output$scatterplot <- 
       plotly::renderPlotly(scatterplot())
     
+    output$scatterplotTitle <- 
+      shiny::renderUI({
+        scatterplotTitle()
+      })
+    
     output$timeSeries <- 
       plotly::renderPlotly(timeSeries())
+    
+    output$timeSeriesTitle <- 
+      shiny::renderUI({
+        timeSeriesTitle()
+      })
+    
+    
   }
 
 

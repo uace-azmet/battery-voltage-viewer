@@ -15,6 +15,7 @@ navsetCardTab <- bslib::navset_card_tab(
     
     bslib::layout_sidebar(
       sidebar = sidebarScatterplot, # `scr##_sidebarScatterplot.R`
+      shiny::htmlOutput(outputId = "scatterplotTitle"),
       plotly::plotlyOutput("scatterplot") 
     )
   ),
@@ -25,6 +26,7 @@ navsetCardTab <- bslib::navset_card_tab(
     
     bslib::layout_sidebar(
       sidebar = sidebarTimeSeries, # `scr##_sidebarTimeSeries.R`
+      shiny::htmlOutput(outputId = "timeSeriesTitle"),
       plotly::plotlyOutput("timeSeries") 
     )
   )
