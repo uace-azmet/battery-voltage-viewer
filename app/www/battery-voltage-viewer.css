@@ -14,14 +14,20 @@
     content: attr(data-title);
 }
 
-.accordion-body {
+.accordion {
+  padding-bottom: 24px !important;
   padding-left: 24px !important;
   padding-right: 24px !important;
+  padding-top: 0px !important;
 }
 
-.accordion-button {
-  padding-left: 24px !important;
-  padding-right: 24px !important;
+.bolder-icon {
+  stroke-width: 0.5;
+  stroke: currentColor; /* Inherits the 'color' property of the parent */
+}
+
+.bslib-sidebar-layout {
+  padding-bottom: 0px;
 }
 
 /* https://stackoverflow.com/questions/77114751/is-it-possible-to-modify-the-arrow-that-collapses-the-sidebar */
@@ -29,7 +35,16 @@
   fill: #989898 !important;
 }
 
+.bslib-sidebar-layout > .collapse-toggle:hover {
+  background-color: #f8f8f8 !important;
+}
+
+.bslib-sidebar-layout > .collapse-toggle:hover > .collapse-icon {
+  fill: #191919 !important;
+}
+
 .bslib-sidebar-layout.bslib-mb-spacing.html-fill-item {
+  border-width: 0px !important;
   margin-bottom: 0px !important;
 }
 
@@ -37,7 +52,7 @@
   background-color: #FFFFFF; 
   border-color: #001C48; 
   color: #001C48;
-  margin-top: 8px !important;
+  margin-top: 48px !important;
 }
 
 .btn:active {
@@ -79,8 +94,23 @@
   font-weight: bold;
 }
 
+.data-display-title {
+  margin-top: 24px !important;
+  padding-bottom: 1rem !important;
+}
+
+.data-options-title {
+  margin-top: 24px !important;
+  padding-bottom: 1rem !important;
+}
+
+.date-selection-title {
+  margin-top: 24px !important;
+  padding-bottom: 1rem !important;
+}
+
 .datepicker {
-  background-color: #FFFFFF;
+  background-color: #FFFFFF !important;
   box-shadow: 0 -6px 12px rgb(var(--bs-body-color-rgb, 0, 0, 0), 0.1);
   border-radius: 0 0 var(--bs-border-radius) var(--bs-border-radius);
   color: var(--bs-body-color);
@@ -127,14 +157,10 @@
 }
 
 .figure-footer {
-  color: #191919;
-}
-
-.figure-help-text {
-  color: #606060;
+  color: #606060; 
   font-size: 0.85rem;
   font-style: normal;
-  margin-bottom: 48px !important;
+  margin-top: 0.5rem;
 }
 
 .form-control:focus {
@@ -142,15 +168,11 @@
   box-shadow: 0 0 0 0.1rem #0000001A;
 }
 
-.help-block {
-  color: #989898 !important;
-  font-size: 1rem;
-  margin-bottom: -8px !important;
-  margin-top: -12px !important;
-}
-
-.main {
-  padding-top: 20px !important;
+.main.bslib-gap-spacing.html-fill-container {
+  padding-bottom: 0px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 24px;
 }
 
 .modal-body {
@@ -175,7 +197,11 @@
 }
 
 .modal-title {
+  color: #191919 !important;
+  font-size: 1rem;
+  /* font-weight: normal !important; */
   margin-top: 0px !important;
+  text-align: left;
 }
 
 .modebar-container {
@@ -200,8 +226,22 @@
   text-shadow: none !important;
 }
 
-.month.focused {
+.month.disabled {
   background-color: #FFFFFF !important;
+  border-color: none !important;
+  color: var(--bs-tertiary-color) !important;
+  text-shadow: none !important;
+}
+
+.month.disabled:hover {
+  background-color: #FFFFFF !important;
+  border-color: none !important;
+  color: var(--bs-tertiary-color) !important;
+  text-shadow: none !important;
+}
+
+.month.focused {
+  background-color: rgb(226, 233, 235) !important;
   border-color: none !important;
   color: var(--bs-body-color) !important;
   text-shadow: none !important;
@@ -221,27 +261,53 @@
   text-shadow: none !important;
 }
 
+.month.focused.disabled {
+  background-color: #FFFFFF !important;
+  border-color: none !important;
+  color: var(--bs-tertiary-color) !important;
+  text-shadow: none !important;
+}
+
+.month.focused.disabled:hover {
+  background-color: #FFFFFF !important;
+  border-color: none !important;
+  color: var(--bs-tertiary-color) !important;
+  text-shadow: none !important;
+}
+
 .next:hover {
   background-color: rgb(226, 233, 235) !important;
+}
+
+.page-bottom-text {
+  color: #191919;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 48px !important;
 }
 
 .prev:hover {
   background-color: rgb(226, 233, 235) !important;
 }
 
+.scatterplot-title {
+  padding-bottom: 10px !important;
+  padding-top: 24px;
+}
+
 .selectize-dropdown .active {
-  background-color: rgb(226, 233, 235); 
-  color: var(--bs-body-color);
+  background-color: rgb(226, 233, 235) !important; 
+  color: var(--bs-body-color) !important;
 }
 
 .selectize-dropdown .active:not(.selected) {
-  background-color: rgb(226, 233, 235); 
-  color: var(--bs-body-color);
+  background-color: rgb(226, 233, 235) !important; 
+  color: var(--bs-body-color) !important;
 }
 
 .selectize-dropdown .selected:not(.active) {
-  background-color: var(--bs-body-bg); 
-  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg) !important; 
+  color: var(--bs-body-color) !important;
 }
 
 .selectize-input {
@@ -265,9 +331,21 @@
   top: calc(50%) !important; 
 }
 
+.sidebar-content {
+  padding-bottom: 24px !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  padding-top: 24px !important;
+}
+
 .table-condensed {
   background-color: #FFFFFF; 
   color: var(--bs-body-color);
+}
+
+.time-series-title {
+  padding-bottom: 10px !important;
+  padding-top: 24px;
 }
 
 .year:hover {
@@ -298,6 +376,13 @@
   text-shadow: none !important;
 }
 
+.year.disabled {
+  background-color: #FFFFFF !important;
+  border-color: none !important;
+  color: var(--bs-tertiary-color) !important;
+  text-shadow: none !important;
+}
+
 .year.focused {
   background-color: #FFFFFF !important;
   border-color: none !important;
@@ -307,8 +392,16 @@
 
 /* id */
 
-#datepickerModal {
-  color: #989898 !important;
-  font-size: 1rem;
-  text-align: left;
+#downloadCSV {
+  /* margin-bottom: 48px;
+  margin-left: 0px; */
+  margin-right: 1.5rem;
+  margin-top: 0px !important;
+}
+
+#downloadTSV {
+  /* margin-bottom: 48px;
+  margin-left: 0px;
+  margin-right: 1.5rem; */
+  margin-top: 0px !important;
 }
