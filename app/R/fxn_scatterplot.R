@@ -1,6 +1,6 @@
 #' `fxn_scatterplot.R` Generate scatterplot based on user input
 #' 
-#' @param inData - daily AZMet data from `dataAZMetDataELT()`
+#' @param inData - daily AZMet data from `azDaily()`
 #' @param azmetStation - user-specified AZMet station
 #' @param batteryVariable - user-specified battery variable
 #' @param weatherVariable - user-specified weather variable

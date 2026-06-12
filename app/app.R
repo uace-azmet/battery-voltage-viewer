@@ -202,11 +202,6 @@ server <-
     
     # Outputs -----
     
-    output$figureHelpText <- 
-      shiny::renderUI({
-        figureHelpText()
-      })
-    
     output$navsetCardTab <- 
       shiny::renderUI({
         shiny::req(showNavsetCardTab())

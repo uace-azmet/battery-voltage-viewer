@@ -39,7 +39,6 @@ fxn_azDaily <-
         tibble::deframe()
       
       azDaily <- azDaily %>%
-        #dplyr::mutate(dplyr::across("wind_2min_timestamp", as.character)) %>%
         dplyr::select(all_of(c(dailyVarsID, dailyVarsMeasure))) %>%
         dplyr::rename(!!! renameColumns)
     }
