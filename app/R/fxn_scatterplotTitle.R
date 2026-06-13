@@ -1,12 +1,11 @@
 #' `fxn_scatterplotTitle.R` - Build title for scatterplot tab
 #' 
-#' @param startDate - Start date of period of interest
-#' @param endDate - End date of period of interest
+#' @param inData - daily AZMet data from `azDaily()`
 #' @return `scatterplotTitle` - Title for scatterplot tab
 
 
 fxn_scatterplotTitle <- 
-  function(startDate, endDate) {
+  function(inData) {
     
     scatterplotTitle <- 
       htmltools::p(
@@ -16,7 +15,7 @@ fxn_scatterplotTitle <-
             htmltools::HTML("&nbsp;&nbsp;"),
             toupper(
               paste0(
-                "<strong>Daily data from ", gsub(" 0", " ", format(startDate, "%B %d, %Y")), " through ", gsub(" 0", " ", format(endDate, "%B %d, %Y")), " across the network</strong>"
+                "<strong>Daily data from ", gsub(" 0", " ", format(min(inData$datetime), "%B %d, %Y")), " through ", gsub(" 0", " ", format(max(inData$datetime), "%B %d, %Y")), " across the network</strong>"
               )
             ),
             htmltools::HTML("&nbsp;")

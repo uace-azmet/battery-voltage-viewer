@@ -31,7 +31,8 @@ timeSeriesSidebar <-
     shiny::selectInput(
       inputId = "azmetStationTimeSeries", 
       label = "AZMet Station",
-      choices = c("Select a station..." = "", sort(azmetStationMetadata$meta_station_name)),
+      # choices = c("Select a station..." = "", sort(azmetStationMetadata$meta_station_name)),
+      choices = NULL,
       selected = NULL
     ),
     
