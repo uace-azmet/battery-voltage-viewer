@@ -62,7 +62,7 @@ server <-
       shiny::updateSelectInput(
         inputId = "azmetStationTimeSeries",
         label = "AZMet Station",
-        choices = c("Select a station..." = "", unique(azmetStationChoices())),
+        choices = c("Select a station..." = "", azmetStationChoices()),
         selected = azmetStation() # Reactive value initialized in `_global.R`
       )
     })
@@ -73,7 +73,7 @@ server <-
       shiny::updateSelectInput(
         inputId = "azmetStationScatterplot",
         label = "AZMet Station",
-        choices = c("Select a station..." = "", unique(azmetStationChoices())),
+        choices = c("Select a station..." = "", azmetStationChoices()),
         selected = azmetStation() # Reactive value initialized in `_global.R`
       )
     })
@@ -188,9 +188,9 @@ server <-
         shiny::req(azmetStation(), batteryVariable(), weatherVariable())
         message("scatterplotTitle")
         fxn_scatterplotTitle(
-          inData = azDaily(),
-          startDate = input$startDate,
-          endDate = input$endDate
+          inData = azDaily()#,
+          # startDate = input$startDate,
+          # endDate = input$endDate
         )
       })
     
@@ -207,12 +207,13 @@ server <-
       })
     
     timeSeriesTitle <-
-      shiny::eventReactive(azDaily(), {
+      shiny::reactive({
         shiny::req(azmetStation(), batteryVariable(), weatherVariable())
         message("timeSeriesTitle")
         fxn_timeSeriesTitle(
-          startDate = input$startDate,
-          endDate = input$endDate
+          inData = azDaily()#,
+          # startDate = input$startDate,
+          # endDate = input$endDate
         )
       })
     
